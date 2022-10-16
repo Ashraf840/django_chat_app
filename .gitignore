@@ -1,0 +1,8 @@
+.env
+env/
+
+#Django
+db.sqlite3
+
+#Pycharm extensions
+.idea/
