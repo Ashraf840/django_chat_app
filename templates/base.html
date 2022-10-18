@@ -7,6 +7,8 @@
         | Django Chat</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
+
+    {% block customCSS %} {% endblock %}
 </head>
 <body class="bg-teal-600">
 
@@ -28,5 +30,6 @@
 
     {% block content %} {% endblock %}
 
+{% block customJS %} {% endblock %}
 </body>
 </html>
