@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout
 from .forms import SignupForm
 
+
 def frontPage(request):
     context = {
         'title': 'Welcome'
