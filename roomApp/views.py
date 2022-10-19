@@ -12,3 +12,15 @@ def roomsList(request):
         'rooms': rooms,
     }
     return render(request, 'roomApp/roomList.html', context)
+
+
+@login_required
+def roomDetail(request, slug):
+    room = Room.objects.get(slug=slug)
+    context = {
+        'title': room.name,
+        'room': room,
+    }
+    return render(request, 'roomApp/roomDetail.html', context)
+
+

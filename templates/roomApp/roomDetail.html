@@ -13,19 +13,18 @@
 {% endblock %}
 
 {% block content %}
-<div class="pb-12 lg:p-20 text-center bg-slate-500">
-    <h1 class="text-3xl lg:text-6xl text-white mb-12">Chat Rooms</h1>
+<div class="pb-4 lg:pb-20 lg:pt-5 lg:px-5 bg-slate-500">
+    <h1 class="text-3xl lg:text-6xl text-white mb-8">Room: {{ room.name }}</h1>
 
-    <div class="p-10 lg:p-20 bg-red-500 grid grid-cols-4 gap-x-8 gap-y-8">
+    <div class="lg:p-20 bg-red-500 grid grid-cols-4 gap-x-8 gap-y-8">
         {% for room in rooms %}
-        <a href="{% url 'roomDetail' room.slug %}" id="card-room-thumbnail">
+        <a href="#" id="card-room-thumbnail">
             <div class="max-w-sm rounded overflow-hidden shadow-lg bg-sky-300">
                 <img class="w-full"
                      src="https://c4.wallpaperflare.com/wallpaper/275/953/312/3d-digital-art-abstract-simple-background-wallpaper-preview.jpg"
                      alt="Room thumbnail">
                 <div class="px-6 py-4">
-                    <div class="font-bold text-xl mb-2"> {{ room.name }} </div>
-                    <div class="font-bold text-xl mb-2"> #{{ room.slug }} </div>
+                    <div class="font-bold text-xl mb-2"> #{{ room.name }} </div>
                     <p class="text-gray-700 text-base">
                         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et
                         perferendis eaque, exercitationem praesentium nihil.
