@@ -13,34 +13,19 @@
 {% endblock %}
 
 {% block content %}
-<div class="pb-4 lg:pb-20 lg:pt-5 lg:px-5 bg-slate-500">
-    <h1 class="text-3xl lg:text-6xl text-white mb-8">Room: {{ room.name }}</h1>
+<div class="pb-4 lg:pb-10 lg:pt-5 lg:px-5 bg-slate-500">
+    <div class="lg:p-5 bg-red-500 grid grid-cols-4 h-fit">
+        <div class="bg-orange-600 h-96">
+            {% include 'roomApp/roomDetailComponents/people.html' %}
+        </div>
 
-    <div class="lg:p-20 bg-red-500 grid grid-cols-4 gap-x-8 gap-y-8">
-        {% for room in rooms %}
-        <a href="#" id="card-room-thumbnail">
-            <div class="max-w-sm rounded overflow-hidden shadow-lg bg-sky-300">
-                <img class="w-full"
-                     src="https://c4.wallpaperflare.com/wallpaper/275/953/312/3d-digital-art-abstract-simple-background-wallpaper-preview.jpg"
-                     alt="Room thumbnail">
-                <div class="px-6 py-4">
-                    <div class="font-bold text-xl mb-2"> #{{ room.name }} </div>
-                    <p class="text-gray-700 text-base">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatibus quia, nulla! Maiores et
-                        perferendis eaque, exercitationem praesentium nihil.
-                    </p>
-                </div>
-                <div class="px-6 py-4 flex flex-col">
-                    <button class="m-3 px-5 py-2 block rounded-xl text-white bg-teal-600 hover:bg-teal-700">Join</button>
-                </div>
-                <div class="px-6 pt-4 pb-2">
-                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#photography</span>
-                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#travel</span>
-                    <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">#winter</span>
-                </div>
-            </div>
-        </a>
-        {% endfor %}
+        <div class="col-span-2 bg-lime-600">
+            {% include 'roomApp/roomDetailComponents/chatBody.html' %}
+        </div>
+
+        <div class="bg-violet-600">
+            {% include 'roomApp/roomDetailComponents/chatRoomDetail.html' %}
+        </div>
     </div>
 </div>
 {% endblock %}
