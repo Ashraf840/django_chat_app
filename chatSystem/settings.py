@@ -28,6 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# NB: Taking the name alias of the controllers
 LOGOUT_REDIRECT_URL = 'login'
 LOGIN_REDIRECT_URL = 'frontPage'
 LOGIN_URL = 'login'

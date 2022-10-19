@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block customCSS %}
+<style>
+    #card-room-thumbnail {
+        cursor: pointer;
+        text-decoration: none;
+    }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="pb-4 lg:pb-10 lg:pt-5 lg:px-5 bg-slate-500">
+    <div class="lg:p-5 bg-red-500 grid grid-cols-4 h-fit">
+        <div class="bg-orange-600 h-96">
+            {% include 'roomApp/roomDetailComponents/people.html' %}
+        </div>
+
+        <div class="col-span-2 bg-lime-600">
+            {% include 'roomApp/roomDetailComponents/chatBody.html' %}
+        </div>
+
+        <div class="bg-violet-600">
+            {% include 'roomApp/roomDetailComponents/chatRoomDetail.html' %}
+        </div>
+    </div>
+</div>
+{% endblock %}

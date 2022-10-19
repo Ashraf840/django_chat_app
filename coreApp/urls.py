@@ -3,6 +3,7 @@ from . import views
 from django.contrib.auth import views as auth_views
 
 
+# Pass the "Login" keyword for the title in the login-page
 class MyLoginView(auth_views.LoginView):
     template_name = 'coreApp/login.html'
 
@@ -17,7 +18,7 @@ class MyLoginView(auth_views.LoginView):
 urlpatterns = [
     path('', views.frontPage, name='frontPage'),
     path('signup/', views.signup, name='signup'),
-    # path('login/', auth_views.LoginView.as_view(template_name='coreApp/login.html'), name='login'),
+    # path('login/', auth_views.LoginView.as_view(template_name='coreApp/login.html'), name='login'),   # if no context needs to be passed in that page
     path('login/', MyLoginView.as_view(), name='login'),
     path('logout/', views.userLogout, name='logout'),
 ]
