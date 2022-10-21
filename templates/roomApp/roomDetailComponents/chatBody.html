@@ -2,10 +2,10 @@
 {% load static %}
 
 <div class="w-full" style="height:80%">
-    <!-- Scroll Design ref: https://tailwind-scrollbar-example.adoxography.repl.co/ -->
-    <div class="max-h-full overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-700">
+    <!-- Scroll Design ref [yet to install]: https://tailwind-scrollbar-example.adoxography.repl.co/ -->
+    <div class="max-h-full overflow-y-scroll">
         {% for i in sample %}
-        <div class="grid grid-cols-9 bg-gray-200 px-6 h-12 my-5 mx-5 rounded-xl chat-messages"
+        <div class="grid grid-cols-9 bg-gray-200 px-6 h-12 my-7 mx-5 rounded-xl chat-messages"
              id="chat-messages">
             <div class="bg-pink-300 flex justify-center items-center">
                 <img src="{% static 'img/avatar.png' %}" alt="people avatar" height="40" width="40"
