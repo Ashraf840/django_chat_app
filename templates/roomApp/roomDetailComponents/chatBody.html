@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 {% load static %}
 
-<div class="w-full bg-white">
-    <h2>Chat Body</h2>
-
-    <div class="max-h-64 overflow-y-auto">
+<div class="w-full" style="height:80%">
+    <!-- Scroll Design ref: https://tailwind-scrollbar-example.adoxography.repl.co/ -->
+    <div class="max-h-full overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-700">
         {% for i in sample %}
         <div class="grid grid-cols-9 bg-gray-200 px-6 h-12 my-5 mx-5 rounded-xl chat-messages"
              id="chat-messages">
@@ -26,10 +25,10 @@
 </div>
 
 
-<div class="bg-red-400 mt-6 mx-4 rounded-xl">
+<div class="bg-red-400 mt-8 mx-4 py-2 rounded-xl">
     <form action="#" method="POST" class="flex">
         <input type="text" name="content" id="chat-message-input"
-            class="p-4 rounded-xl w-full flex-1 mr-3 outline-0"
+            class="p-4 rounded-xl w-full flex-1 mr-3 outline-0 bg-slate-100"
             placeholder="Your message...">
 
         <button class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700"
