@@ -7,6 +7,7 @@ Stage-1:
 Stage-2:
 - Create room app
 - Create "room" model
+    - Create auto slugify functionality in the django admin panel
 - Show all the available rooms
     - Make search functionality for all the available rooms
     - Make filter functionality of the chat-rooms

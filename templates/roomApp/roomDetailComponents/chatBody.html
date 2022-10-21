@@ -1,6 +1,39 @@
 <!DOCTYPE html>
+{% load static %}
 
-<div class="w-full h-full bg-fuchsia-600">
-    <h2>Chat Body</h2>
-    Lorem ipsum dolor sit amet
+<div class="w-full" style="height:80%">
+    <!-- Scroll Design ref: https://tailwind-scrollbar-example.adoxography.repl.co/ -->
+    <div class="max-h-full overflow-y-scroll scrollbar-thin scrollbar-thumb-blue-700">
+        {% for i in sample %}
+        <div class="grid grid-cols-9 bg-gray-200 px-6 h-12 my-5 mx-5 rounded-xl chat-messages"
+             id="chat-messages">
+            <div class="bg-pink-300 flex justify-center items-center">
+                <img src="{% static 'img/avatar.png' %}" alt="people avatar" height="40" width="40"
+                     class="border-solid border-4 border-sky-500 rounded-full">
+            </div>
+            <div class="bg-green-300 col-span-8">
+                <p class="font-semibold">John Doe</p>
+                <p>msg: Lorem ipsum dolor sit amet.</p>
+            </div>
+            <div></div>
+            <div class="bg-teal-300 flex items-center">
+                <small style="font-size:.7rem">date/time</small>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+<div class="bg-red-400 mt-8 mx-4 py-2 rounded-xl">
+    <form action="#" method="POST" class="flex">
+        <input type="text" name="content" id="chat-message-input"
+            class="p-4 rounded-xl w-full flex-1 mr-3 outline-0 bg-slate-100"
+            placeholder="Your message...">
+
+        <button class="px-5 py-3 rounded-xl text-white bg-teal-600 hover:bg-teal-700"
+            id="chat-message-submit">
+            Send
+        </button>
+    </form>
 </div>
