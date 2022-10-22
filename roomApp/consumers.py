@@ -3,6 +3,8 @@ from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import sync_to_async, async_to_sync
 
 
+# Following my university-final-proj
+# Instead of using AsyncWebsockerConsumer, using only WebsocketConsumer
 class ChatConsumer(WebsocketConsumer):
     # Create an asynchronous connection-function
     def connect(self):

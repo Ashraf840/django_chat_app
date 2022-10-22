@@ -100,6 +100,9 @@ If in windows: Open the Ubuntu; execute the cmd to start redis-server first.
 [Ref]: 
 # https://linuxhandbook.com/system-has-not-been-booted-with-systemd/
 # https://askubuntu.com/a/1379567
+
+# Require to install 'channels-redis' pip-repo.
+[Solution]: https://www.youtube.com/watch?v=eHALIS7awDc
 """
 CHANNEL_LAYERS = {
     "default": {
