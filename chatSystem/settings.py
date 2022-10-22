@@ -93,6 +93,11 @@ DATABASES = {
 
 
 # Channel-Redis Server Setup
+"""
+If in windows: Open the Ubuntu; execute the cmd to start redis-server first.
+    sudo service redis-server start
+    sudo service redis-server status
+"""
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
