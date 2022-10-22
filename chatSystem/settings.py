@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-3&+(=hjoth5rxdyor$pwciqlj=4@km=ms_@-jxpzlfw-jm7r4k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # NB: Taking the name alias of the controllers
 LOGOUT_REDIRECT_URL = 'login'
@@ -97,12 +97,21 @@ DATABASES = {
 If in windows: Open the Ubuntu; execute the cmd to start redis-server first.
     sudo service redis-server start
     sudo service redis-server status
+[Ref]: 
+# https://linuxhandbook.com/system-has-not-been-booted-with-systemd/
+# https://askubuntu.com/a/1379567
+
+# Require to install 'channels-redis' pip-repo.
+[Solution]: https://www.youtube.com/watch?v=eHALIS7awDc
 """
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
+            "hosts": [
+                ("127.0.0.1", 6379),
+                # ("172.17.0.3", 6379),
+            ],
         },
     },
 }
