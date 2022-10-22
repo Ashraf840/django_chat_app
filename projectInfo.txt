@@ -13,4 +13,7 @@ Stage-2:
     - Make filter functionality of the chat-rooms
 - Create room-detail view (Chats will be established here)
 - Create a chat-consumer
+    - Define that consumer into the 'routing.py' file
+    - Define the ProtocolTypeRouter inside the "chatSystem/asgi.py" file.
+        This allows us to use different protocols for our requests.
 - Joining to a chat

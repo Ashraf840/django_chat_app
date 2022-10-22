@@ -97,6 +97,9 @@ DATABASES = {
 If in windows: Open the Ubuntu; execute the cmd to start redis-server first.
     sudo service redis-server start
     sudo service redis-server status
+[Ref]: 
+# https://linuxhandbook.com/system-has-not-been-booted-with-systemd/
+# https://askubuntu.com/a/1379567
 """
 CHANNEL_LAYERS = {
     "default": {

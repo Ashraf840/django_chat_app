@@ -29,3 +29,16 @@
     </div>
 </div>
 {% endblock %}
+
+
+{% block scripts %}
+<script>
+    const roomName = `{{room.slug}}`;   // fetch the room-slug from the django-template-variable
+    // console.log(`Room name (slug): ${roomName}`);
+    const url = `ws://${window.location.host}/ws/chat/${roomName}/`;    // construct the websocket url
+    // console.log(url);
+    const chatSocket = new WebSocket(url);
+    console.log(chatSocket);
+</script>
+{% endblock %}
+
