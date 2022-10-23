@@ -40,12 +40,12 @@
     const url = `ws://${window.location.host}/ws/chat/${roomName}/`;    // construct the websocket url
     // console.log(url);
     const username = `{{ request.user.username }}`;
-    console.log(username);
+    // console.log(username);
     const send = document.querySelector('#chat-message-submit');    // fetch from 'roomDetailComponents/chatBody.html' file
 
     // WEBSOCKET OBJECT
     const chatSocket = new WebSocket(url);
-    console.log(chatSocket);
+    // console.log(chatSocket);
 
     // WEBSOCKET ONMESSAGE FUNC
     chatSocket.onmessage = function(e) {
