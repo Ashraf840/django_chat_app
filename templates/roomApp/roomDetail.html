@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %} {{ title }} {% endblock %}
 
@@ -50,7 +51,27 @@
     chatSocket.onmessage = function(e) {
         console.log('onmessage');
         const data = JSON.parse(e.data);    // parse data sent from the backend consumer
-        console.log(data);
+        // Check if the data is not empty
+        if (data) {
+            // console.log(`Message sent from the backend: ${data.message}`); // access 'message' key from the 'data' object; since the data-obj contains certain key-value pair from the backend; more detail into 'chat_message' method in the "roomApp/consumers.py" file
+
+            // Append HTML code-block into the chat-body section
+            let chatHtml = `<div class="grid grid-cols-9 bg-gray-200 px-6 h-12 my-7 mx-5 rounded-xl">
+                <div class="bg-pink-300 flex justify-center items-center">
+                    <img src="{% static 'img/avatar.png' %}" alt="people avatar" height="40" width="40"
+                         class="border-solid border-4 border-sky-500 rounded-full">
+                </div>
+                <div class="bg-green-300 col-span-8">
+                    <p class="font-semibold">${data.username}</p>
+                    <p>${data.message}</p>
+                </div>
+                <div></div>
+                <div class="bg-teal-300 flex items-center">
+                    <small style="font-size:.7rem">date/time</small>
+                </div>
+            </div>`;
+            document.querySelector('#chat-messages').innerHTML += chatHtml;
+        }
     }
 
     // WEBSOCKET ONCLOSE FUNC
