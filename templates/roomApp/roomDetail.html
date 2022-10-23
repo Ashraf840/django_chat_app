@@ -65,13 +65,16 @@
         const message = messageInputDom.value;
         // console.log(`${message}`);
 
-        // Send the message to backend consumer
-        chatSocket.send(JSON.stringify({
-            'message': message,
-            'username': username,
-            'room': roomName,
-        }));
-        messageInputDom.value = '';  // Clear the input-field after sending msg to backend
+        // Send msg to backend, only if the message is not empty
+        if (message) {
+            // Send the message to backend consumer
+            chatSocket.send(JSON.stringify({
+                'message': message,
+                'username': username,
+                'room': roomName,
+            }));
+            messageInputDom.value = '';  // Clear the input-field after sending msg to backend
+        }
     }
 </script>
 {% endblock %}
