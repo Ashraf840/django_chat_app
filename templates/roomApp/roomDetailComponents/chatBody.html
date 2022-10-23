@@ -4,8 +4,8 @@
 <div class="w-full" style="height:80%">
     <!-- Scroll Design ref [yet to install]: https://tailwind-scrollbar-example.adoxography.repl.co/ -->
     <div class="max-h-full overflow-y-scroll chat-messages" id="chat-messages">
-        {% for i in sample %}
-        <div class="grid grid-cols-9 bg-gray-200 px-6 h-12 my-7 mx-5 rounded-xl">
+        {% for msg in messages %}
+        <div class="grid grid-cols-9 bg-gray-200 px-6 h-12 my-10 mx-5 rounded-xl">
             <!-- User DP -->
             <div class="bg-pink-300 flex justify-center items-center">
                 <img src="{% static 'img/avatar.png' %}" alt="people avatar" height="40" width="40"
@@ -13,13 +13,13 @@
             </div>
             <!-- Username & Message body -->
             <div class="bg-green-300 col-span-8">
-                <p class="font-semibold">John Doe</p>
-                <p>msg: Lorem ipsum dolor sit amet.</p>
+                <p class="font-semibold">{{ msg.user.username }}</p>
+                <p>{{ msg.content }}</p>
             </div>
             <div></div>
             <!-- Date & Time -->
-            <div class="bg-teal-300 flex items-center">
-                <small style="font-size:.7rem">date/time</small>
+            <div class="bg-teal-300 flex items-center w-36">
+                <small style="font-size:.7rem">{{ msg.date_added }}</small>
             </div>
         </div>
         {% endfor %}
