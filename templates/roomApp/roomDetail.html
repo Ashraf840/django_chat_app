@@ -49,6 +49,8 @@
     // WEBSOCKET ONMESSAGE FUNC
     chatSocket.onmessage = function(e) {
         console.log('onmessage');
+        const data = JSON.parse(e.data);    // parse data sent from the backend consumer
+        console.log(data);
     }
 
     // WEBSOCKET ONCLOSE FUNC
