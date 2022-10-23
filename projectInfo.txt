@@ -17,3 +17,14 @@ Stage-2:
     - Define the ProtocolTypeRouter inside the "chatSystem/asgi.py" file.
         This allows us to use different protocols for our requests.
 - Joining to a chat
+    - Enable redis on docker. cmds below
+        docker ps -a
+        docker exec -it docker-redis bash
+    - Connect frontend websocket to backend consumer
+
+Stage-3:
+- Sending messages
+    - Get the username into the websocket-enabled script.
+
+- Storing messages
+- Scrolling to the bottom

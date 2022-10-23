@@ -21,7 +21,7 @@ class ChatConsumer(WebsocketConsumer):
 
         async_to_sync(self.accept())
 
-    def disconnect(self):
+    def disconnect(self, *args, **kwargs):
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
