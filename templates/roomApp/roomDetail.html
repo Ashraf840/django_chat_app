@@ -61,7 +61,15 @@
         e.preventDefault();     // prevent from submitting as a post-req
         const messageInputDom = document.querySelector('#chat-message-input');
         const message = messageInputDom.value;
-        console.log(`${message}`);
+        // console.log(`${message}`);
+
+        // Send the message to backend consumer
+        chatSocket.send(JSON.stringify({
+            'message': message,
+            'username': username,
+            'room': roomName,
+        }));
+        messageInputDom.value = '';  // Clear the input-field after sending msg to backend
     }
 </script>
 {% endblock %}

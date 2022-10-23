@@ -21,6 +21,12 @@ class ChatConsumer(WebsocketConsumer):
 
         async_to_sync(self.accept())
 
+    # Receive the msg from frontend & broadcast it to the entire channel
+    def receive(self, text_data=None, bytes_data=None):
+        data = json.loads(text_data)    # decode json-stringified data
+        print(data)
+
+
     def disconnect(self, *args, **kwargs):
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
