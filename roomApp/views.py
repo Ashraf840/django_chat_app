@@ -18,7 +18,7 @@ def roomsList(request):
 def roomDetail(request, slug):
     room = Room.objects.get(slug=slug)
     people = [i for i in range(5)]
-    sample = [i for i in range(15)]
+    sample = [i for i in range(1)]
     context = {
         'title': room.name,
         'room': room,
