@@ -1,9 +1,11 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import sync_to_async, async_to_sync
+from .models import Message, Room
+from django.contrib.auth.models import User
 
 
-# Following my university-final-proj
+# Following my university-final-proj + The YT Video
 # Instead of using AsyncWebsockerConsumer, using only WebsocketConsumer
 class ChatConsumer(WebsocketConsumer):
     # Create an asynchronous connection-function
@@ -28,6 +30,14 @@ class ChatConsumer(WebsocketConsumer):
         message = data['message']
         username = data['username']
         room = data['room']
+
+        # before sending the msg to the channel-group, store the msg into db
+        async_to_sync(self.save_message(
+            room=room,
+            username=username,
+            message=message
+        ))
+
         # send the data to channel-group
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
@@ -51,6 +61,13 @@ class ChatConsumer(WebsocketConsumer):
             'username': username,
             'room': room,
         }))
+
+    # Wait while storing msg into db
+    # @sync_to_async
+    def save_message(self, message, username, room):
+        user = User.objects.get(username=username)
+        room = Room.objects.get(slug=room)
+        Message.objects.create(room=room, user=user, content=message)
 
     def disconnect(self, *args, **kwargs):
         async_to_sync(self.channel_layer.group_discard)(

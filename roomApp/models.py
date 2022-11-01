@@ -18,3 +18,6 @@ class Message(models.Model):
 
     class Meta:
         ordering = ['date_added', ]
+
+    def __str__(self):
+        return self.content

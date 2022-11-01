@@ -30,4 +30,6 @@ Stage-3:
     - Append the entire CHAT-BLOCK into the HTML & interpolate the required data using js.
 - Storing messages
     - Create a new model to store the messages.
+    - Populate some sample msg & display them into frontend msg.
+    - Store the messages into db from chatConsumer using "sync_to_async"
 - Scrolling to the bottom
