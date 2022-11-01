@@ -17,11 +17,13 @@ def roomsList(request):
 @login_required
 def roomDetail(request, slug):
     room = Room.objects.get(slug=slug)
+    messages = Message.objects.filter(room=room)[:25]  # fetch the first 25 messages of this room
     people = [i for i in range(5)]
     sample = [i for i in range(1)]
     context = {
         'title': room.name,
         'room': room,
+        'messages': messages,
         'people': people,
         'sample': sample,
     }

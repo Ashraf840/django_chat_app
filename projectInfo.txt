@@ -25,6 +25,11 @@ Stage-2:
 Stage-3:
 - Sending messages
     - Get the username into the websocket-enabled script.
-
+    - Parse the data into js-object which is sent from the backend.
+    - Check if the data is not empty.
+    - Append the entire CHAT-BLOCK into the HTML & interpolate the required data using js.
 - Storing messages
+    - Create a new model to store the messages.
+    - Populate some sample msg & display them into frontend msg.
+    - Store the messages into db from chatConsumer using "sync_to_async"
 - Scrolling to the bottom
