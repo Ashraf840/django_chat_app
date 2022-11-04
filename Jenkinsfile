@@ -14,8 +14,8 @@ pipeline{
         {
             steps{
                 sh '''
-                chmod +x envsetup.sh
-                ./envsetup.sh
+                chmod +x envsetupA.sh
+                ./envsetupA.sh
                 '''
             }
         }
@@ -23,8 +23,8 @@ pipeline{
         {
             steps{
                 sh '''
-                chmod +x uwsgi.sh
-                ./uwsgi.sh
+                chmod +x uwsgiA.sh
+                ./uwsgiA.sh
                 '''
             }
         }
@@ -32,8 +32,8 @@ pipeline{
         {
             steps{
                 sh '''
-                chmod +x nginx.sh
-                ./nginx.sh
+                chmod +x nginxA.sh
+                ./nginxA.sh
                 '''
             }
         }

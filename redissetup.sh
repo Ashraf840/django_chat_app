@@ -6,4 +6,9 @@ echo "Present Dir: $PWD"
 
 
 
+# Check redis-server status
+sudo systemctl status redis
+
+echo "Redis setup finished!"
+
 

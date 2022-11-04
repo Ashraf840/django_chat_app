@@ -9,6 +9,7 @@ Pipeline stage
 2. Create 'redisSetup.sh' file.
 [Article]    https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-22-04
 3. Create '.gitignore' file.
-4. Create 'envsetup.sh' file.
+4. Construct a pipeline skeleton to aid making the pipeline while executing "build now" in Jenkins.
+5. Create 'envsetup.sh' file.
 
 
