@@ -18,6 +18,16 @@ else
     echo "Created the teachatty_uwsgi.log file into path: $PWD/logs/teachatty_uwsgi.log"
 fi
 
+# Check if the 'vassals' dir exists, otherwise create the dir
+if [ -d /etc/uwsgi/vassals ]
+then
+    echo "vassals dir exists"
+else
+    echo "vassals dir doesn't exists"
+    sudo mkdir /etc/uwsgi/vassals
+    echo "Created '/etc/uwsgi/vassals' dir!"
+fi
+sudo chown -R jenkins /etc/uwsgi/vassals
 
 sudo systemctl daemon-reload
 sudo systemctl restart uwsgi.service
