@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "running envsetup.sh file!"
+echo "running redissetup.sh file!"
 echo "User: $USER"
 echo "Present Dir: $PWD"
 
