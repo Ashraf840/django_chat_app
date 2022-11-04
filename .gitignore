@@ -1,8 +1,32 @@
-.env
-env/
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
 
-#Django
+# Django stuff:
+*.log
+local_settings.py
 db.sqlite3
+db.sqlite3-journal
 
-#Pycharm extensions
-.idea/
+# PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
+__pypackages__/
+
+# Celery stuff
+celerybeat-schedule
+celerybeat.pid
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/

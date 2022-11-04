@@ -1,0 +1,14 @@
+--------------- CI/CD Info ---------------
+
+# Ref Video:  https://www.youtube.com/watch?v=Sl94H5e7MPw&t=4s
+
+
+Pipeline stage
+--------------
+1. Create 'intial-setup.sh' file.
+2. Create 'redisSetup.sh' file.
+[Article]    https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-22-04
+3. Create '.gitignore' file.
+4. Create 'envsetup.sh' file.
+
+
