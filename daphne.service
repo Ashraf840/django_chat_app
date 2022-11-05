@@ -1,0 +1,18 @@
+[Unit]
+Description=Daphne Service
+
+#export DJANGO_SETTINGS_MODULE=mysite.settings
+
+[Service]
+WorkingDirectory=/var/lib/jenkins/workspace/teachatty_chat_app/
+User=ubuntu
+Group=ubuntu
+Environment=DJANGO_SETTINGS_MODULE=chatSystem.settings
+ExecStart=/bin/bash /var/lib/jenkins/workspace/teachatty_chat_app/daphne_en.sh
+Restart=always
+KillSignal=SIGQUIT
+Type=notify
+NotifyAccess=all
+
+[Install]
+WantedBy=multi-user.target
