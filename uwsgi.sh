@@ -57,7 +57,11 @@ then
     echo "teachatty.ini file exists"
 else
     echo "teachatty.ini file doesn't exists"
+    sudo cp -rf teachatty.ini /etc/uwsgi/vassals/teachatty.ini
 fi
+sudo cp -rf teachatty.ini /etc/uwsgi/vassals/teachatty.ini
+echo "Copied teachatty.ini file to path: /etc/uwsgi/vassals/teachatty.ini"
+sudo chown -R jenkins /etc/uwsgi/vassals/teachatty.ini
 
 sudo systemctl daemon-reload
 sudo systemctl restart uwsgi.service
