@@ -18,6 +18,15 @@ else
     echo "Created the 'nginx_access.log' & 'nginx_error.log' file!"
 fi
 
+# shellcheck disable=SC2232
+sudo cp -rf $NGINX_CONF_FILE $NGINX_SITES_AVAILABLE_DIR/teachatty_nginx.conf
+sudo chown -R jenkins $NGINX_SITES_AVAILABLE_DIR/teachatty_nginx.conf
+echo "Copied the '$NGINX_CONF_FILE' file in path: $NGINX_SITES_AVAILABLE_DIR"
+chmod 710 /var/lib/jenkins/workspace/teachatty_chat_app
+
+sudo ln -s $NGINX_SITES_AVAILABLE_DIR/teachatty_nginx.conf $NGINX_SITES_ENABLED_DIR
+sudo chown -R jenkins $NGINX_SITES_ENABLED_DIR/teachatty_nginx.conf
+echo "Created symlink of '$NGINX_SITES_AVAILABLE_DIR/teachatty_nginx.conf' inside the path: $NGINX_SITES_ENABLED_DIR"
 
 sudo nginx -t
 
