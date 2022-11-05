@@ -51,6 +51,14 @@ else
 fi
 sudo chown -R jenkins /etc/systemd/system/emperor.uwsgi.service
 
+# Check if the '/etc/uwsgi/teachatty.ini' file exists, otherwise create the file
+if [ -e /etc/uwsgi/vassals/teachatty.ini ]
+then
+    echo "teachatty.ini file exists"
+else
+    echo "teachatty.ini file doesn't exists"
+fi
+
 sudo systemctl daemon-reload
 sudo systemctl restart uwsgi.service
 sudo systemctl status uwsgi.service
