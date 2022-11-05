@@ -40,6 +40,17 @@ else
 fi
 sudo chown -R jenkins /etc/uwsgi/emperor.ini
 
+# Check if the '/etc/systemd/system/emperor.uwsgi.service' file exists, otherwise create the file
+if [ -e /etc/systemd/system/emperor.uwsgi.service ]
+then
+    echo "emperor.uwsgi.service file exists"
+else
+    echo "emperor.uwsgi.service file doesn't exists"
+    sudo cp -rf emperor.uwsgi.service /etc/systemd/system/emperor.uwsgi.service
+    echo "Copied emperor.uwsgi.service file into path: /etc/systemd/system/emperor.uwsgi.service"
+fi
+sudo chown -R jenkins /etc/systemd/system/emperor.uwsgi.service
+
 sudo systemctl daemon-reload
 sudo systemctl restart uwsgi.service
 sudo systemctl status uwsgi.service
