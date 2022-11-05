@@ -29,6 +29,17 @@ else
 fi
 sudo chown -R jenkins /etc/uwsgi/vassals
 
+# Check if the '/etc/uwsgi/emperor.ini' file exists, otherwise create the file
+if [ -e /etc/uwsgi/emperor.ini ]
+then
+    echo "emperor.ini file exists"
+else
+    echo "emperor.ini file doesn't exists"
+    sudo cp -rf emperor.ini /etc/uwsgi/emperor.ini
+    echo "Copied the emperor.ini file into path: /etc/uwsgi/emperor.ini"
+fi
+sudo chown -R jenkins /etc/uwsgi/emperor.ini
+
 sudo systemctl daemon-reload
 sudo systemctl restart uwsgi.service
 sudo systemctl status uwsgi.service
