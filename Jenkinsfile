@@ -28,6 +28,15 @@ pipeline{
                 '''
             }
         }
+        stage('Daphne Setup')
+        {
+            steps{
+                sh '''
+                chmod +x daphne.sh
+                ./daphne.sh
+                '''
+            }
+        }
         stage('NGINX Setup')
         {
             steps{
