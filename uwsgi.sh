@@ -4,7 +4,7 @@ echo "running uwsgi.sh file!"
 echo "User: $USER"
 echo "Present Dir: $PWD"
 
-# Install uwsgi in the python env
+# Activate & install uwsgi in the python env
 source env/bin/activate
 pip3 install uwsgi
 
