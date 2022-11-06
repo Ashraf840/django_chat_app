@@ -24,5 +24,9 @@ sudo chown -R jenkins /etc/systemd/system/teachatty_chat_app_daphne.service
 sudo systemctl daemon-reload
 sudo systemctl start teachatty_chat_app_daphne.service
 sudo systemctl status teachatty_chat_app_daphne.service
+sudo systemctl restart uwsgi.service
+sudo systemctl status uwsgi.service
+sudo systemctl restart emperor.uwsgi.service
+sudo systemctl status emperor.uwsgi.service
 
 echo "Daphne setup finished!"
