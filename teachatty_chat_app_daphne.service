@@ -1,11 +1,11 @@
 [Unit]
-Description=Teachatty Chat App Daphne Service
+Description=Teachatty Chat App WebSocket Daphne Service
 
 [Service]
 WorkingDirectory=/var/lib/jenkins/workspace/teachatty_chat_app/
 User=jenkins
 Environment=DJANGO_SETTINGS_MODULE=chatSystem.settings
-ExecStart=/bin/bash /var/lib/jenkins/workspace/teachatty_chat_app/daphne_en.sh
+ExecStart=/var/lib/jenkins/workspace/teachatty_chat_app/env/bin/python /var/lib/jenkins/workspace/teachatty_chat_app/env/bin/daphne -b 0.0.0.0 -p 8001 chatSystem.asgi:application
 Restart=always
 KillSignal=SIGQUIT
 Type=notify
