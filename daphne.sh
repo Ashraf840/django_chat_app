@@ -15,7 +15,7 @@ if [ -e /etc/systemd/system/teachatty_chat_app_daphne.service ]
 then
     echo "teachatty_chat_app_daphne.service file exists"
 else
-    echo "emperor.uwsgi.service file doesn't exists"
+    echo "teachatty_chat_app_daphne.service file doesn't exists"
     sudo cp -rf teachatty_chat_app_daphne.service /etc/systemd/system/teachatty_chat_app_daphne.service
     echo "Copied teachatty_chat_app_daphne.service file into path: /etc/systemd/system/teachatty_chat_app_daphne.service"
 fi
