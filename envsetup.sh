@@ -17,6 +17,7 @@ source env/bin/activate
 pip3 install -r requirements_linux.txt
 python manage.py makemigrations
 python manage.py migrate
+python manage.py collectstatic
 
 echo "Django migrations have been done while executing envsetup.sh!"
 
