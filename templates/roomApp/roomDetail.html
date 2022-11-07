@@ -38,7 +38,7 @@
     const roomName = `{{ room.slug }}`;   // fetch the room-slug from the django-template-variable
     // console.log(`Room name (slug): ${roomName}`);
     const url = `ws://${window.location.host}/ws/chat/${roomName}/`;    // construct the websocket url
-    // console.log(url);
+    console.log(url);
     const username = `{{ request.user.username }}`;
     // console.log(username);
     const send = document.querySelector('#chat-message-submit');    // fetch from 'roomDetailComponents/chatBody.html' file
