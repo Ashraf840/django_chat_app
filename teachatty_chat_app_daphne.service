@@ -14,6 +14,7 @@ ExecStart=/var/lib/jenkins/workspace/teachatty_chat_app/env/bin/daphne \
     --capture-output --log-level debug \
     --bind unix:/run/teachatty_chat_app_daphne.sock \
     -b 0.0.0.0 -p 8001 chatSystem.asgi:application
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target

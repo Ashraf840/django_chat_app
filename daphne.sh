@@ -40,15 +40,16 @@ else
     sudo cp -rf teachatty_chat_app_daphne.service /etc/systemd/system/teachatty_chat_app_daphne.service
     echo "Copied teachatty_chat_app_daphne.service file into path: /etc/systemd/system/teachatty_chat_app_daphne.service"
 fi
+sudo cp -rf teachatty_chat_app_daphne.service /etc/systemd/system/teachatty_chat_app_daphne.service
 sudo chown -R jenkins /etc/systemd/system/teachatty_chat_app_daphne.service
 
-#sudo systemctl daemon-reload
-#sudo systemctl start teachatty_chat_app_daphne
-#sudo systemctl enable teachatty_chat_app_daphne
+sudo systemctl daemon-reload
+sudo systemctl start teachatty_chat_app_daphne.socket
+sudo systemctl enable teachatty_chat_app_daphne.socket
 
 echo "teachatty_chat_app_daphne is about to be started!"
 
-#sudo systemctl restart teachatty_chat_app_daphne
-#sudo systemctl status teachatty_chat_app_daphne
+sudo systemctl restart teachatty_chat_app_daphne.socket
+sudo systemctl status teachatty_chat_app_daphne.socket
 
 echo "Daphne setup finished!"
