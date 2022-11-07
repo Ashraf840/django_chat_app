@@ -1,0 +1,8 @@
+[Unit]
+Description=Teachatty Daphne Socket
+
+[Socket]
+ListenStream=/run/teachatty_chat_app_daphne.sock
+
+[Install]
+WantedBy=sockets.target

@@ -18,6 +18,8 @@ pip3 install -r requirements_linux.txt
 python manage.py makemigrations
 python manage.py migrate
 
+echo "Django migrations have been done while executing envsetup.sh!"
+
 if [ -d "logs" ]
 then
   echo "Log folder exists"
