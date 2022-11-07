@@ -7,14 +7,9 @@ After=network.target
 Type=simple
 WorkingDirectory=/var/lib/jenkins/workspace/teachatty_chat_app/
 User=jenkins
-ExecStart=/var/lib/jenkins/workspace/teachatty_chat_app/env/bin/daphne \
-    --error-logfile /var/lib/jenkins/workspace/teachatty_chat_app/logs/daphne_error.log \
-    --access-logfile /var/lib/jenkins/workspace/teachatty_chat_app/logs/daphne_access.log \
-    --workers 3 \
-    --capture-output --log-level debug \
+ExecStart=/var/lib/jenkins/workspace/teachatty_chat_app/env/bin/python /var/lib/jenkins/workspace/teachatty_chat_app/env/bin/daphne \
     --bind unix:/run/teachatty_chat_app_daphne.sock \
     -b 0.0.0.0 -p 8001 chatSystem.asgi:application
-Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
