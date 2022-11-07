@@ -15,6 +15,8 @@ echo "Present Directory: $PWD"
 source env/bin/activate
 
 pip3 install -r requirements_linux.txt
+python manage.py makemigrations
+python manage.py migrate
 
 if [ -d "logs" ]
 then
