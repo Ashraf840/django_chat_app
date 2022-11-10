@@ -163,7 +163,7 @@ In production server; use only "STATICFILES_DIRS" in spite of "STATIC_ROOT";
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')   # Use in localhost-server instead of STATICFILES_DIRS
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')   # Use in localhost-server instead of STATICFILES_DIRS
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
