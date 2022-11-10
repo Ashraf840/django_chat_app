@@ -1,15 +1,49 @@
 --------------- CI/CD Info ---------------
 
-# Ref Video:  https://www.youtube.com/watch?v=Sl94H5e7MPw&t=4s
+# Django and Jenkins Integration | CI-CD Pipeline for Django Project | Python with CI/CD Pipeline
+[Ref-YT Video]: https://www.youtube.com/watch?v=Sl94H5e7MPw&t=4s
+# How To Set Up Django with Postgres, Nginx, and Daphne (Django Channels) on Ubuntu 20.04
+[Ref-'Medium' Article]: https://okbaboularaoui.medium.com/how-to-set-up-django-with-postgres-nginx-and-daphne-django-channels-on-ubuntu-20-04-b0d24dcc7da9
+# Production Django, WebSockets, Django Channels 2, Daphne, Nginx, Gunicorn, HTTPS
+[Ref-YT Video]: https://www.youtube.com/watch?v=14zdpWW6eqw
+# How To Install and Secure Redis on Ubuntu 22.04
+[Ref-'Digital Ocean' Article]: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-22-04
 
 
-Pipeline stage
---------------
+Jenkins Pipeline stage
+----------------------
+[NB]: Construct a pipeline (filename: Jenkinsfile) skeleton to aid making the pipeline while executing "build now" in Jenkins.
+Create 'Jenkinsfile' after creating 'intial-setup.sh' file.
+
 1. Create 'intial-setup.sh' file.
 2. Create 'redisSetup.sh' file.
-[Article]    https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-22-04
-3. Create '.gitignore' file.
-4. Construct a pipeline skeleton to aid making the pipeline while executing "build now" in Jenkins.
-5. Create 'envsetup.sh' file.
+3. Create 'envsetup.sh' file.
+    - Create 'access.log' file.
+    - Create 'error.log' file.
+4. Create 'uWSGI.sh' file.
+    - Create 'teachatty.ini' file.
+5. Create 'daphne.sh' file.
+    - Create 'daphne_access.log' file.
+    - Create 'daphne_error.log' file.
+    - Create 'teachatty_chat_app_daphne.socket' file.
+    - Create 'teachatty_chat_app_daphne.service' file.
+6. Create 'nginx.sh' file.
+    - Create 'nginx_access.log' file.
+    - Create 'nginx_error.log' file.
+    - Create 'teachatty_nginx.conf' file.
+
+
+
+[CMD]: Start all the services
+-----------------------------
+sudo su
+systemctl daemon-reload
+systemctl restart uwsgi; systemctl restart emperor.uwsgi.service
+systemctl status uwsgi
+systemctl status emperor.uwsgi.service
+systemctl restart teachatty_chat_app_daphne.socket; systemctl restart teachatty_chat_app_daphne.service
+systemctl status teachatty_chat_app_daphne.socket
+systemctl status teachatty_chat_app_daphne.service
+
 
 
