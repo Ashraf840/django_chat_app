@@ -34,5 +34,5 @@ sudo systemctl start nginx
 sudo systemctl enable nginx
 
 echo "Nginx is started!"
-
+sudo chmod -R 777 static
 sudo systemctl status nginx
