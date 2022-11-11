@@ -159,11 +159,12 @@ STATIC_URL = '/static/'
 """
 [NB]: In localhost; use only "STATIC_ROOT" in spite of "STATICFILES_DIRS";
 In production server; use only "STATICFILES_DIRS" in spite of "STATIC_ROOT";
+STATICFILES_DIRS=>Aid to find all the static files across the project filesystem.
 """
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'web/static'),
+    os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')   # Use in localhost-server instead of STATICFILES_DIRS
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')   # Use in localhost-server instead of STATICFILES_DIRS; this dir will be created to store & server the static files while in the production
 
 
 # Default primary key field type
