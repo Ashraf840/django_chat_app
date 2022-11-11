@@ -8,6 +8,9 @@
 [Ref-YT Video]: https://www.youtube.com/watch?v=14zdpWW6eqw
 # How To Install and Secure Redis on Ubuntu 22.04
 [Ref-'Digital Ocean' Article]: https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-redis-on-ubuntu-22-04
+# Complete guide to automate deployment using Jenkins and Github webhooks in Ubuntu Server (Full Automation)
+[Ref-Article]: https://vijaypathak.com.np/2021/09/complete-guide-to-automate-deployment-using-jenkins.html
+
 
 
 Jenkins Pipeline stage
