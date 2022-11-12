@@ -22,3 +22,6 @@ else
     echo "teachatty_chat_app dir doesn't exist! Created the dir!"
     sudo mkdir /var/www/projects_static/teachatty_chat_app
 fi
+
+# Copy the staticfiles dir to /var/www/projects_static/teachatty_chat_app
+cp -R /var/lib/jenkins/workspace/teachatty_chat_app/staticfiles /var/www/projects_static/teachatty_chat_app
