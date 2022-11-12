@@ -25,3 +25,4 @@ fi
 
 # Copy the staticfiles dir to /var/www/projects_static/teachatty_chat_app
 sudo cp -R /var/lib/jenkins/workspace/teachatty_chat_app/staticfiles /var/www/projects_static/teachatty_chat_app
+sudo chown -R root staticfiles
