@@ -34,6 +34,6 @@ sudo systemctl start nginx
 sudo systemctl enable nginx
 
 echo "Nginx is started!"
-sudo chmod -R 777 static
-sudo chown -R jenkins:root static
+#sudo chmod -R 777 staticfiles
+#sudo chown -R root:www-data staticfiles
 sudo systemctl status nginx
