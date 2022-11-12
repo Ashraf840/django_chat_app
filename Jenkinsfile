@@ -37,6 +37,15 @@ pipeline{
                 '''
             }
         }
+        stage('Static File Setup')
+        {
+            steps{
+                sh '''
+                chmod +x staticfile.sh
+                ./staticfile.sh
+                '''
+            }
+        }
         stage('NGINX Setup')
         {
             steps{
