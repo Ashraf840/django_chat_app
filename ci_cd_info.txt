@@ -30,6 +30,12 @@ Create 'Jenkinsfile' after creating 'intial-setup.sh' file.
     - Create 'daphne_error.log' file.
     - Create 'teachatty_chat_app_daphne.socket' file.
     - Create 'teachatty_chat_app_daphne.service' file.
+6. Create 'staticfile.sh' file.
+    - Check or create projects_static inside /var/www
+    - Check or create teachatty_chat_app inside /var/www/projects_static
+    - Copy staticfiles from project dir to /var/www/projects_static/teachatty_chat_app
+    - Change the ownership after staticfiles being copied.
+    - Remove staticfiles from project dir.
 6. Create 'nginx.sh' file.
     - Create 'nginx_access.log' file.
     - Create 'nginx_error.log' file.
