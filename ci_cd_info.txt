@@ -36,7 +36,7 @@ Create 'Jenkinsfile' after creating 'intial-setup.sh' file.
     - Copy staticfiles from project dir to /var/www/projects_static/teachatty_chat_app
     - Change the ownership after staticfiles being copied.
     - Remove staticfiles from project dir.
-6. Create 'nginx.sh' file.
+7. Create 'nginx.sh' file.
     - Create 'nginx_access.log' file.
     - Create 'nginx_error.log' file.
     - Create 'teachatty_nginx.conf' file.

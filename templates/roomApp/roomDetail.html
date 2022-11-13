@@ -37,7 +37,7 @@
     // VARIABLES
     const roomName = `{{ room.slug }}`;   // fetch the room-slug from the django-template-variable
     // console.log(`Room name (slug): ${roomName}`);
-    const url = `ws://${window.location.host}/ws/chat/${roomName}/`;    // construct the websocket url
+    const url = `ws://${window.location.host}/ws/chat/${roomName}/`;    // [PRODUCTION - working]construct the websocket url
     // const url = `ws://${window.location.host}:8001/ws/chat/${roomName}/`;    // [PRODUCTION - not working] construct the websocket url
     console.log(url);
     const username = `{{ request.user.username }}`;
@@ -52,8 +52,9 @@
     chatSocket.onmessage = function(e) {
         console.log('onmessage');
         const data = JSON.parse(e.data);    // parse data sent from the backend consumer
-        // Check if the data is not empty
-        if (data) {
+
+        // Check if the data.message is not empty; Append chat-msg into chat-body
+        if (data.message) {
             // console.log(`Message sent from the backend: ${data.message}`); // access 'message' key from the 'data' object; since the data-obj contains certain key-value pair from the backend; more detail into 'chat_message' method in the "roomApp/consumers.py" file
 
             // Append HTML code-block into the chat-body section
@@ -72,6 +73,11 @@
                 </div>
             </div>`;
             document.querySelector('#chat-messages').innerHTML += chatHtml;
+        }
+
+        // New user Connection Message
+        if (data.user_conn_msg) {
+            console.log(`New Connection: ${data.active_username}`)
         }
     }
 

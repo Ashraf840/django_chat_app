@@ -33,3 +33,8 @@ Stage-3:
     - Populate some sample msg & display them into frontend msg.
     - Store the messages into db from chatConsumer using "sync_to_async"
 - Scrolling to the bottom
+
+
+
+-------------------------------------------- Backlogs
+# Define functionality for active users in each channel.
