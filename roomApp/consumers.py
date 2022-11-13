@@ -12,6 +12,8 @@ class ChatConsumer(WebsocketConsumer):
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']     # fetch the room-name from the request that's being hit from the frontend-page-load through the asgi-request-routing
         self.room_group_name = 'chat_%s' % self.room_name
+        self.user_obj = self.scope['user']
+        print(f"Newly Connected (username): {self.user_obj.username}")
         print(f'Room name: {self.room_name}')
         print(f'Room gorup name: {self.room_group_name}')
 
@@ -22,6 +24,17 @@ class ChatConsumer(WebsocketConsumer):
         print('Backend Consumer (Websocket): Connected!')
 
         async_to_sync(self.accept())
+
+        # Group send about active users
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            # pass a dictionary with custom key-value pairs
+            {
+                'type': 'active_users',
+                'user_conn_status_msg': f'New user connected: {self.user_obj.username}',
+                'user_name': self.user_obj.username,
+            }
+        )
 
     # Receive the msg from frontend & broadcast it to the entire channel
     def receive(self, text_data=None, bytes_data=None):
@@ -50,16 +63,24 @@ class ChatConsumer(WebsocketConsumer):
             }
         )
 
-    # This method will be called in the receive-method while sending msg to channel-group
+    # This method will be called in the receive-method while sending msg to channel-group, event value contains other
     def chat_message(self, event):
         message = event['message']
         username = event['username']
         room = event['room']
-        # Send to the room in the frontend; send in a json-format
+        # Send to the room in the frontend; send in a json-format; send func responsible for sending data to frontend
         self.send(text_data=json.dumps({
             'message': message,
             'username': username,
             'room': room,
+        }))
+
+    def active_users(self, event):
+        user_conn_msg = event['user_conn_status_msg']
+        active_username = event['user_name']
+        self.send(text_data=json.dumps({
+            'user_conn_msg': user_conn_msg,
+            'active_username': active_username,
         }))
 
     # Wait while storing msg into db
