@@ -63,7 +63,8 @@ class ChatConsumer(WebsocketConsumer):
             }
         )
 
-    # This method will be called in the receive-method while sending msg to channel-group, event value contains other
+    # This method will be called in the receive-method while sending msg to channel-group.
+    # "event" param contains other keys (except 'type' key) from inside the dictionary passed as param in "channel_layer.group_send"
     def chat_message(self, event):
         message = event['message']
         username = event['username']
