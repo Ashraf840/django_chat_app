@@ -76,12 +76,22 @@ class ChatConsumer(WebsocketConsumer):
             'room': room,
         }))
 
+    # Passing data to websocket (new user connection)
     def active_users(self, event):
         user_conn_msg = event['user_conn_status_msg']
         active_username = event['user_name']
         self.send(text_data=json.dumps({
             'user_conn_msg': user_conn_msg,
             'active_username': active_username,
+        }))
+
+    # Passing data to websocket (existing user disconnection)
+    def deactive_user(self, event):
+        user_disconn_msg = event['user_conn_status_msg']
+        deactive_username = event['user_name']
+        self.send(text_data=json.dumps({
+            'user_disconn_msg': user_disconn_msg,
+            'deactive_username': deactive_username,
         }))
 
     # Wait while storing msg into db
@@ -92,6 +102,17 @@ class ChatConsumer(WebsocketConsumer):
         Message.objects.create(room=room, user=user, content=message)
 
     def disconnect(self, *args, **kwargs):
+        # Group send about disconnecting users
+        async_to_sync(self.channel_layer.group_send)(
+            self.room_group_name,
+            # pass a dictionary with custom key-value pairs
+            {
+                'type': 'deactive_user',
+                'user_conn_status_msg': f'User disconnected: {self.user_obj.username}',
+                'user_name': self.user_obj.username,
+            }
+        )
+
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name

@@ -79,6 +79,11 @@
         if (data.user_conn_msg) {
             console.log(`New Connection: ${data.active_username}`)
         }
+
+        // Exsting user Disconnection Message
+        if (data.user_disconn_msg) {
+            console.log(`Connection Lost: ${data.deactive_username}`)
+        }
     }
 
     // WEBSOCKET ONCLOSE FUNC
