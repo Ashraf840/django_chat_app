@@ -28,7 +28,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     '3.109.85.86',
-    'www.teachatty.xyz',
+    'teachatty.xyz', 'www.teachatty.xyz',
     '127.0.0.1',
 ]
 
