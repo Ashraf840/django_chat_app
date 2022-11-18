@@ -14,8 +14,10 @@ class ChatConsumer(WebsocketConsumer):
         self.room_group_name = 'chat_%s' % self.room_name
         self.user_obj = self.scope['user']
         print(f"Newly Connected (username): {self.user_obj.username}")
+        print(f"Scope['user']: {self.user_obj}")
         print(f'Room name: {self.room_name}')
         print(f'Room gorup name: {self.room_group_name}')
+        print(f'Channel name: {self.channel_name}')
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
