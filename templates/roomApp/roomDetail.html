@@ -34,6 +34,16 @@
 
 {% block scripts %}
 <script>
+    //alert(`User: $({{ request.user }})`);
+    //function function_{{request.user}}() {
+    //  alert("I am an alert box!");
+    //}
+
+
+
+
+
+
     // VARIABLES
     const roomName = `{{ room.slug }}`;   // fetch the room-slug from the django-template-variable
     // console.log(`Room name (slug): ${roomName}`);
@@ -77,12 +87,24 @@
 
         // New user Connection Message
         if (data.user_conn_msg) {
-            console.log(`New Connection: ${data.active_username}`)
+            console.log(`New Connection: ${data.active_username}`);
+
+            let userConnHtml = `<div class="grid grid-cols-5 bg-red-300 px-6 h-12 my-3" id="${data.active_username}">
+                <div class="flex justify-center items-center">
+                    <img src="{% static 'img/avatar.png' %}" alt="people avatar" height="40" width="40"
+                         class="border-solid border-4 border-sky-500 rounded-full">
+                </div>
+                <div class="col-span-4 flex items-center">
+                    <p>${data.active_username}</p>
+                </div>
+            </div>`;
+            document.querySelector('#user-connection').innerHTML += userConnHtml;
         }
 
-        // Exsting user Disconnection Message
+        // Existing user Disconnection Message
         if (data.user_disconn_msg) {
-            console.log(`Connection Lost: ${data.deactive_username}`)
+            console.log(`Connection Lost: ${data.deactive_username}`);
+            document.getElementById(`${data.deactive_username}`).remove();
         }
     }
 
