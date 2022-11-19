@@ -1,7 +1,7 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import sync_to_async, async_to_sync
-from .models import Message, Room
+from .models import Message, Room, UserOnline
 from django.contrib.auth.models import User
 
 
@@ -27,7 +27,21 @@ class ChatConsumer(WebsocketConsumer):
 
         async_to_sync(self.accept())
 
-        # Group send about active users
+        # Get all the active users of current room from asynchronously querying the db
+        active_users = async_to_sync(self.existing_users(room=self.room_name))
+        # print(dir(active_users))  # Checking the "AsyncToSync" object
+        # print("Active users (queried from the db):", active_users.__dict__)
+        print("Active users (queried from the db):", list(active_users.awaitable))
+        user_names = [u.user.username for u in list(active_users.awaitable)]
+        print(f"Active users (usernames only): {user_names}")
+        # Send the query object only to the newly connected user's web-socket; NOT IN ALL THE CHANNELS OF THIS GROUP (Room)
+
+
+        # Check if the user already exist, check if the user already has "is_active=True", otherwise change that to "True".
+        # If doesn't exist, add newly connected user to the DB.
+        async_to_sync(self.current_user_existence(user=self.user_obj, room=self.room_name))
+
+        # Group send about active users (Including newly connected)
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             # pass a dictionary with custom key-value pairs
@@ -77,6 +91,29 @@ class ChatConsumer(WebsocketConsumer):
             'username': username,
             'room': room,
         }))
+
+    # Check currently connected user does exist in db "UserOnline" table; otherwise create record
+    def current_user_existence(self, user, room):
+        user_obj = User.objects.get(id=user.id)
+        room_obj = Room.objects.get(slug=room)
+        try:
+            user_exist = UserOnline.objects.get(user=user_obj, room=room_obj)
+            print("User exists! from 'current_user_existence()' func!")
+            # Check if the user's "is_active=True"; otherwise change it to True
+        except:
+            print("User doesn't exist! from 'current_user_existence()' func!")
+            # Create user online record
+            UserOnline.objects.create(user=user_obj, room=room_obj)
+
+
+    # Return all the active users of current room
+    def existing_users(self, room):
+        room_obj = Room.objects.get(slug=room)
+        # room_obj = Room.objects.get(slug=self.room_name)
+        print(f"Room obj (from 'existing_users()' func): {room_obj}")
+        users_obj = UserOnline.objects.filter(room=room_obj, is_active=True)
+        print(f"Existing active users (from 'existing_users()' func): {users_obj}")
+        return users_obj
 
     # Passing data to websocket (new user connection)
     def active_users(self, event):
