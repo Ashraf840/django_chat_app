@@ -100,6 +100,12 @@ class ChatConsumer(WebsocketConsumer):
             user_exist = UserOnline.objects.get(user=user_obj, room=room_obj)
             print("User exists! from 'current_user_existence()' func!")
             # Check if the user's "is_active=True"; otherwise change it to True
+            if not user_exist.is_active:
+                user_exist.is_active = True
+                user_exist.save()
+            #     print("User wasn't online until now!")
+            # else:
+            #     print("User is online!")
         except:
             print("User doesn't exist! from 'current_user_existence()' func!")
             # Create user online record
