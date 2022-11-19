@@ -21,3 +21,11 @@ class Message(models.Model):
 
     def __str__(self):
         return self.content
+
+
+class UserOnline(models.Model):
+    user = models.ForeignKey(User, related_name='UserConnectionActivity', on_delete=models.CASCADE)
+    room = models.ForeignKey(Room, related_name='UserConnectionActivity', on_delete=models.CASCADE)
+    is_active = models.BooleanField(verbose_name="Online", default=True)
+    joined_at = models.DateTimeField(verbose_name="First Joined", auto_now_add=True)  # Updates on creation only
+    last_update = models.DateTimeField(verbose_name="Last Activity", auto_now=True)  # Updates on creation & modification

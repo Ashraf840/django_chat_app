@@ -85,26 +85,31 @@
             document.querySelector('#chat-messages').innerHTML += chatHtml;
         }
 
-        // New user Connection Message
+        // New User Connection Message
         if (data.user_conn_msg) {
-            console.log(`New Connection: ${data.active_username}`);
+            // Check if the user-conn-div already exist; thus it shouldn't repeat creating same div again
+            let user_conn_div = document.getElementById(`user_conn_${data.active_username}`);
+            //console.log(user_conn_div);
+            if (user_conn_div == null) {
+                console.log(`New Connection: ${data.active_username}`);
 
-            let userConnHtml = `<div class="grid grid-cols-5 bg-red-300 px-6 h-12 my-3" id="${data.active_username}">
-                <div class="flex justify-center items-center">
-                    <img src="{% static 'img/avatar.png' %}" alt="people avatar" height="40" width="40"
-                         class="border-solid border-4 border-sky-500 rounded-full">
-                </div>
-                <div class="col-span-4 flex items-center">
-                    <p>${data.active_username}</p>
-                </div>
-            </div>`;
-            document.querySelector('#user-connection').innerHTML += userConnHtml;
+                let userConnHtml = `<div class="grid grid-cols-5 bg-red-300 px-6 h-12 my-3" id="user_conn_${data.active_username}">
+                    <div class="flex justify-center items-center">
+                        <img src="{% static 'img/avatar.png' %}" alt="people avatar" height="40" width="40"
+                             class="border-solid border-4 border-sky-500 rounded-full">
+                    </div>
+                    <div class="col-span-4 flex items-center">
+                        <p>${data.active_username}</p>
+                    </div>
+                </div>`;
+                document.querySelector('#user-connection').innerHTML += userConnHtml;
+            }
         }
 
         // Existing user Disconnection Message
         if (data.user_disconn_msg) {
             console.log(`Connection Lost: ${data.deactive_username}`);
-            document.getElementById(`${data.deactive_username}`).remove();
+            document.getElementById(`user_conn_${data.deactive_username}`).remove();
         }
     }
 
