@@ -75,7 +75,7 @@ class ChatConsumer(WebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
         self.user_obj = self.scope['user']
-        # print(f"Newly Connected (username): {self.user_obj.username}")
+        print(f"Newly Connected (username): {self.user_obj.username}")
         # print(f"Scope['user']: {self.user_obj}")
         # print(f'Room name: {self.room_name}')
         # print(f'Room gorup name: {self.room_group_name}')
@@ -94,10 +94,10 @@ class ChatConsumer(WebsocketConsumer):
         # print(dir(active_users))  # Checking the "AsyncToSync" object
         # print("Active users (queried from the db):", active_users.__dict__)
         print("Active users (queried from the db):", list(active_users.awaitable))
-        user_names = [u.user.username for u in list(active_users.awaitable)]
-        print(f"Active users (usernames only): {user_names}")
+        user_names = [u.user.username for u in list(active_users.awaitable) if u.user.username != self.user_obj.username]    # Ignore the current user's username by adding a condition into this list-comprehension
+        print(f"Active users (usernames only; except current user's username): {user_names}")
 
-        # Send the query object only to the newly connected user's web-socket; NOT IN ALL THE CHANNELS OF THIS GROUP (Room)
+        # Send the query object only to the newly connected user's web-socket; NOT TO ALL THE CHANNELS OF THIS GROUP (Room)
         self.send(text_data=json.dumps({
             'existing_users_list': 'Existing Users List in the Room',
             'user_names': user_names,
