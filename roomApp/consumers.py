@@ -4,13 +4,58 @@ from asgiref.sync import sync_to_async, async_to_sync
 from .models import Message, Room, UserOnline
 from django.contrib.auth.models import User
 
-
 # Following my university-final-proj + The YT Video
-# Instead of using AsyncWebsockerConsumer, using only WebsocketConsumer
+# Instead of using AsyncWebsocketConsumer, using only WebsocketConsumer
+
+
+# [Static Method] Return all the active users of current room
+def existing_users(room):
+    room_obj = Room.objects.get(slug=room)
+    # room_obj = Room.objects.get(slug=self.room_name)
+    print(f"Room obj (from 'existing_users()' func): {room_obj}")
+    users_obj = UserOnline.objects.filter(room=room_obj, is_active=True)
+    print(f"Existing active users (from 'existing_users()' func): {users_obj}")
+    return users_obj
+
+
+# [Static Method] Check currently connected user does exist in db "UserOnline" table; otherwise create record
+def current_user_existence(user, room):
+    user_obj = User.objects.get(id=user.id)
+    room_obj = Room.objects.get(slug=room)
+    try:
+        user_exist = UserOnline.objects.get(user=user_obj, room=room_obj)
+        print("Try-block; User exists! from 'current_user_existence()' func!")
+        # Check if the user's online; otherwise change it to True
+        if not user_exist.is_active:
+            print("User wasn't active until now!")
+            user_exist.is_active = True
+            user_exist.save()
+    except UserOnline.DoesNotExist:
+        print("Except-block; User doesn't exist! from 'current_user_existence()' func!")
+        # Create user online record
+        UserOnline.objects.create(user=user_obj, room=room_obj)
+
+
+# [Static Method]: Store chat msg into DB
+def save_message(message, username, room):
+    user = User.objects.get(username=username)
+    room = Room.objects.get(slug=room)
+    Message.objects.create(room=room, user=user, content=message)
+
+
 class ChatConsumer(WebsocketConsumer):
+    # Constructor / Initializer
+    def __init__(self, *args, **kwargs):
+        super(ChatConsumer, self).__init__(*args, **kwargs)
+        self.room_name = None
+        self.room_group_name = None
+        self.user_obj = None
+
+    # Default method of "WebsocketConsumer" class
     # Create an asynchronous connection-function
     def connect(self):
-        self.room_name = self.scope['url_route']['kwargs']['room_name']     # fetch the room-name from the request that's being hit from the frontend-page-load through the asgi-request-routing
+        # fetch the room-name from the request that's being hit from the frontend-page-load through the asgi-request-routing
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
         self.user_obj = self.scope['user']
         print(f"Newly Connected (username): {self.user_obj.username}")
@@ -18,17 +63,16 @@ class ChatConsumer(WebsocketConsumer):
         print(f'Room name: {self.room_name}')
         print(f'Room gorup name: {self.room_group_name}')
         print(f'Channel name: {self.channel_name}')
-
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
-            self.channel_name    # channels automatically fixes room-name?
+            self.channel_name  # channels automatically fixes room-name?
         )
         print('Backend Consumer (Websocket): Connected!')
 
         async_to_sync(self.accept())
 
         # Get all the active users of current room from asynchronously querying the db
-        active_users = async_to_sync(self.existing_users(room=self.room_name))
+        active_users = async_to_sync(existing_users(room=self.room_name))
         # print(dir(active_users))  # Checking the "AsyncToSync" object
         # print("Active users (queried from the db):", active_users.__dict__)
         print("Active users (queried from the db):", list(active_users.awaitable))
@@ -36,10 +80,9 @@ class ChatConsumer(WebsocketConsumer):
         print(f"Active users (usernames only): {user_names}")
         # Send the query object only to the newly connected user's web-socket; NOT IN ALL THE CHANNELS OF THIS GROUP (Room)
 
-
         # Check if the user already exist, check if the user already has "is_active=True", otherwise change that to "True".
         # If doesn't exist, add newly connected user to the DB.
-        async_to_sync(self.current_user_existence(user=self.user_obj, room=self.room_name))
+        async_to_sync(current_user_existence(user=self.user_obj, room=self.room_name))
 
         # Group send about active users (Including newly connected)
         async_to_sync(self.channel_layer.group_send)(
@@ -52,16 +95,17 @@ class ChatConsumer(WebsocketConsumer):
             }
         )
 
+    # Default method of "WebsocketConsumer" class
     # Receive the msg from frontend & broadcast it to the entire channel
     def receive(self, text_data=None, bytes_data=None):
-        data = json.loads(text_data)    # decode json-stringified data into python-dict
+        data = json.loads(text_data)  # decode json-stringified data into python-dict
         # print(data)
         message = data['message']
         username = data['username']
         room = data['room']
 
         # before sending the msg to the channel-group, store the msg into db
-        async_to_sync(self.save_message(
+        async_to_sync(save_message(
             room=room,
             username=username,
             message=message
@@ -92,35 +136,6 @@ class ChatConsumer(WebsocketConsumer):
             'room': room,
         }))
 
-    # Check currently connected user does exist in db "UserOnline" table; otherwise create record
-    def current_user_existence(self, user, room):
-        user_obj = User.objects.get(id=user.id)
-        room_obj = Room.objects.get(slug=room)
-        try:
-            user_exist = UserOnline.objects.get(user=user_obj, room=room_obj)
-            print("User exists! from 'current_user_existence()' func!")
-            # Check if the user's "is_active=True"; otherwise change it to True
-            if not user_exist.is_active:
-                user_exist.is_active = True
-                user_exist.save()
-            #     print("User wasn't online until now!")
-            # else:
-            #     print("User is online!")
-        except:
-            print("User doesn't exist! from 'current_user_existence()' func!")
-            # Create user online record
-            UserOnline.objects.create(user=user_obj, room=room_obj)
-
-
-    # Return all the active users of current room
-    def existing_users(self, room):
-        room_obj = Room.objects.get(slug=room)
-        # room_obj = Room.objects.get(slug=self.room_name)
-        print(f"Room obj (from 'existing_users()' func): {room_obj}")
-        users_obj = UserOnline.objects.filter(room=room_obj, is_active=True)
-        print(f"Existing active users (from 'existing_users()' func): {users_obj}")
-        return users_obj
-
     # Passing data to websocket (new user connection)
     def active_users(self, event):
         user_conn_msg = event['user_conn_status_msg']
@@ -134,18 +149,14 @@ class ChatConsumer(WebsocketConsumer):
     def deactive_user(self, event):
         user_disconn_msg = event['user_conn_status_msg']
         deactive_username = event['user_name']
+
+        # Change the "is_active" status of the exiting user
         self.send(text_data=json.dumps({
             'user_disconn_msg': user_disconn_msg,
             'deactive_username': deactive_username,
         }))
 
-    # Wait while storing msg into db
-    # @sync_to_async
-    def save_message(self, message, username, room):
-        user = User.objects.get(username=username)
-        room = Room.objects.get(slug=room)
-        Message.objects.create(room=room, user=user, content=message)
-
+    # Default method of "WebsocketConsumer" class
     def disconnect(self, *args, **kwargs):
         # Group send about disconnecting users
         async_to_sync(self.channel_layer.group_send)(
@@ -158,6 +169,7 @@ class ChatConsumer(WebsocketConsumer):
             }
         )
 
+        # Remove the currently attempted user-channel from the Channel Group (Room)
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
