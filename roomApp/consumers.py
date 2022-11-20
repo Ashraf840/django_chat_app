@@ -36,6 +36,23 @@ def current_user_existence(user, room):
         UserOnline.objects.create(user=user_obj, room=room_obj)
 
 
+# Change existing user online status to offline
+# MIRROR METHOD of "current_user_existence"; Require REFACTOR TO MAKE THE CODE DRY;
+# (NB: put a logic for routing these functions into a single function.)
+def deactive_user_online_conn_db(user, room):
+    user_obj = User.objects.get(id=user.id)
+    room_obj = Room.objects.get(slug=room)
+    try:
+        user_exist = UserOnline.objects.get(user=user_obj, room=room_obj)
+        if user_exist.is_active:
+            print("User was active until now!")
+            user_exist.is_active = False
+            user_exist.save()
+    except UserOnline.DoesNotExist:
+        print("User doesn't exist to make status offline!")
+    pass
+
+
 # [Static Method]: Store chat msg into DB
 def save_message(message, username, room):
     user = User.objects.get(username=username)
@@ -63,6 +80,7 @@ class ChatConsumer(WebsocketConsumer):
         print(f'Room name: {self.room_name}')
         print(f'Room gorup name: {self.room_group_name}')
         print(f'Channel name: {self.channel_name}')
+
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name  # channels automatically fixes room-name?
@@ -136,7 +154,7 @@ class ChatConsumer(WebsocketConsumer):
             'room': room,
         }))
 
-    # Passing data to websocket (new user connection)
+    # Passing data to websocket (new user connection; this method is used to send msg into the group)
     def active_users(self, event):
         user_conn_msg = event['user_conn_status_msg']
         active_username = event['user_name']
@@ -145,12 +163,11 @@ class ChatConsumer(WebsocketConsumer):
             'active_username': active_username,
         }))
 
-    # Passing data to websocket (existing user disconnection)
+    # Passing data to websocket (existing user disconnection; this method is used to send msg into the group)
     def deactive_user(self, event):
         user_disconn_msg = event['user_conn_status_msg']
         deactive_username = event['user_name']
 
-        # Change the "is_active" status of the exiting user
         self.send(text_data=json.dumps({
             'user_disconn_msg': user_disconn_msg,
             'deactive_username': deactive_username,
@@ -158,6 +175,12 @@ class ChatConsumer(WebsocketConsumer):
 
     # Default method of "WebsocketConsumer" class
     def disconnect(self, *args, **kwargs):
+        # Change the "is_active" status of the exiting user
+        self.room_name = self.scope['url_route']['kwargs']['room_name']
+        self.user_obj = self.scope['user']
+        # print(f"Room: {self.room_name};  User: {self.user_obj}")
+        async_to_sync(deactive_user_online_conn_db(user=self.user_obj, room=self.room_name))
+
         # Group send about disconnecting users
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
