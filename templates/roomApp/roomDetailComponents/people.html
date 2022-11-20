@@ -2,8 +2,9 @@
 {% load static %}
 
 <div class="w-full h-full bg-pink-800" id="user-connection">
-    <h2>Peoples</h2>
+    <h2>People Online</h2>
 
+    {% comment %}
     {% for i in people %}
     <div class="grid grid-cols-5 bg-red-300 px-6 h-12 my-3">
         <div class="flex justify-center items-center">
@@ -15,6 +16,6 @@
         </div>
     </div>
     {% endfor %}
-
+    {% endcomment %}
 
 </div>
