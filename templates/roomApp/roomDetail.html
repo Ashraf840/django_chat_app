@@ -87,7 +87,13 @@
 
         // Existing Users List (queried from the db); used by the newly connected user
         if (data.existing_users_list) {
-            console.log(`Other existing users: ${data.user_names}`);
+            //console.log(`Other existing users: ${data.user_names}; List Length: ${data.user_names.length}`);
+            //new_user_conn_adding_div(data.user_names);
+            // Iterate through all the usernames
+            for (let i=0; i<=data.user_names.length-1; i++) {
+                //console.log(`Other active user-${i}: ${data.user_names[i]}`);
+                new_user_conn_adding_div(data.user_names[i]);
+            }
         }
 
         // New User Connection Message
@@ -97,17 +103,7 @@
             //console.log(user_conn_div);
             if (user_conn_div == null) {
                 console.log(`New Connection: ${data.active_username}`);
-
-                let userConnHtml = `<div class="grid grid-cols-5 bg-red-300 px-6 h-12 my-3" id="user_conn_${data.active_username}">
-                    <div class="flex justify-center items-center">
-                        <img src="{% static 'img/avatar.png' %}" alt="people avatar" height="40" width="40"
-                             class="border-solid border-4 border-sky-500 rounded-full">
-                    </div>
-                    <div class="col-span-4 flex items-center">
-                        <p>${data.active_username}</p>
-                    </div>
-                </div>`;
-                document.querySelector('#user-connection').innerHTML += userConnHtml;
+                new_user_conn_adding_div(data.active_username);
             }
         }
 
@@ -140,6 +136,22 @@
             }));
             messageInputDom.value = '';  // Clear the input-field after sending msg to backend
         }
+    }
+
+
+    // Add newly connected users' div to the "People" section
+    function new_user_conn_adding_div (username) {
+        //alert(`new_user_conn_adding_div function is called! Username: ${username}`);
+        let userConnHtml = `<div class="grid grid-cols-5 bg-red-300 px-6 h-12 my-3" id="user_conn_${username}">
+            <div class="flex justify-center items-center">
+                <img src="{% static 'img/avatar.png' %}" alt="people avatar" height="40" width="40"
+                     class="border-solid border-4 border-sky-500 rounded-full">
+            </div>
+            <div class="col-span-4 flex items-center">
+                <p>${username}</p>
+            </div>
+        </div>`;
+        document.querySelector('#user-connection').innerHTML += userConnHtml;
     }
 </script>
 {% endblock %}
