@@ -85,6 +85,11 @@
             document.querySelector('#chat-messages').innerHTML += chatHtml;
         }
 
+        // Existing Users List (queried from the db); used by the newly connected user
+        if (data.existing_users_list) {
+            console.log(`Other existing users: ${data.user_names}`);
+        }
+
         // New User Connection Message
         if (data.user_conn_msg) {
             // Check if the user-conn-div already exist; thus it shouldn't repeat creating same div again

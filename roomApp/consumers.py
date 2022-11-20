@@ -50,7 +50,6 @@ def deactive_user_online_conn_db(user, room):
             user_exist.save()
     except UserOnline.DoesNotExist:
         print("User doesn't exist to make status offline!")
-    pass
 
 
 # [Static Method]: Store chat msg into DB
@@ -60,6 +59,7 @@ def save_message(message, username, room):
     Message.objects.create(room=room, user=user, content=message)
 
 
+# Consumer Class
 class ChatConsumer(WebsocketConsumer):
     # Constructor / Initializer
     def __init__(self, *args, **kwargs):
@@ -75,11 +75,11 @@ class ChatConsumer(WebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
         self.user_obj = self.scope['user']
-        print(f"Newly Connected (username): {self.user_obj.username}")
-        print(f"Scope['user']: {self.user_obj}")
-        print(f'Room name: {self.room_name}')
-        print(f'Room gorup name: {self.room_group_name}')
-        print(f'Channel name: {self.channel_name}')
+        # print(f"Newly Connected (username): {self.user_obj.username}")
+        # print(f"Scope['user']: {self.user_obj}")
+        # print(f'Room name: {self.room_name}')
+        # print(f'Room gorup name: {self.room_group_name}')
+        # print(f'Channel name: {self.channel_name}')
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
@@ -96,10 +96,15 @@ class ChatConsumer(WebsocketConsumer):
         print("Active users (queried from the db):", list(active_users.awaitable))
         user_names = [u.user.username for u in list(active_users.awaitable)]
         print(f"Active users (usernames only): {user_names}")
+
         # Send the query object only to the newly connected user's web-socket; NOT IN ALL THE CHANNELS OF THIS GROUP (Room)
+        self.send(text_data=json.dumps({
+            'existing_users_list': 'Existing Users List in the Room',
+            'user_names': user_names,
+        }))
 
         # Check if the user already exist, check if the user already has "is_active=True", otherwise change that to "True".
-        # If doesn't exist, add newly connected user to the DB.
+        # If the user doesn't exist, add newly connected user into the DB.
         async_to_sync(current_user_existence(user=self.user_obj, room=self.room_name))
 
         # Group send about active users (Including newly connected)
