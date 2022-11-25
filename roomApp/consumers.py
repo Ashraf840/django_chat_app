@@ -18,6 +18,24 @@ def existing_users(room):
     return users_obj
 
 
+# [Static Method] Used in 'current_user_existence()'
+def make_user_online(user):
+    # Check if the user's online; otherwise change it to True
+    if not user.is_active:
+        print("User wasn't active until now!")
+        user.is_active = True
+        user.save()
+
+
+# [Static Method] Used in 'deactive_user_online_conn_db()'
+def make_user_offline(user):
+    # Check if the user's offline; otherwise change it to False
+    if user.is_active:
+        print("User was active until now!")
+        user.is_active = False
+        user.save()
+
+
 # [Static Method] Check currently connected user does exist in db "UserOnline" table; otherwise create record
 def current_user_existence(user, room):
     user_obj = User.objects.get(id=user.id)
@@ -26,10 +44,7 @@ def current_user_existence(user, room):
         user_exist = UserOnline.objects.get(user=user_obj, room=room_obj)
         print("Try-block; User exists! from 'current_user_existence()' func!")
         # Check if the user's online; otherwise change it to True
-        if not user_exist.is_active:
-            print("User wasn't active until now!")
-            user_exist.is_active = True
-            user_exist.save()
+        make_user_online(user=user_exist)
     except UserOnline.DoesNotExist:
         print("Except-block; User doesn't exist! from 'current_user_existence()' func!")
         # Create user online record
@@ -44,10 +59,8 @@ def deactive_user_online_conn_db(user, room):
     room_obj = Room.objects.get(slug=room)
     try:
         user_exist = UserOnline.objects.get(user=user_obj, room=room_obj)
-        if user_exist.is_active:
-            print("User was active until now!")
-            user_exist.is_active = False
-            user_exist.save()
+        # Check if the user's offline; otherwise change it to False
+        make_user_offline(user=user_exist)
     except UserOnline.DoesNotExist:
         print("User doesn't exist to make status offline!")
 
@@ -78,8 +91,8 @@ class ChatConsumer(WebsocketConsumer):
         print(f"Newly Connected (username): {self.user_obj.username}")
         # print(f"Scope['user']: {self.user_obj}")
         # print(f'Room name: {self.room_name}')
-        # print(f'Room gorup name: {self.room_group_name}')
-        # print(f'Channel name: {self.channel_name}')
+        # print(f'Room group name: {self.room_group_name}')
+        print(f'Channel name: {self.channel_name}')
 
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
@@ -184,6 +197,8 @@ class ChatConsumer(WebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.user_obj = self.scope['user']
         # print(f"Room: {self.room_name};  User: {self.user_obj}")
+
+        # [start] if-condition: check if no channel connected to the User/UserOnline
         async_to_sync(deactive_user_online_conn_db(user=self.user_obj, room=self.room_name))
 
         # Group send about disconnecting users
@@ -196,6 +211,7 @@ class ChatConsumer(WebsocketConsumer):
                 'user_name': self.user_obj.username,
             }
         )
+        # [end] if-condition: check if no channel connected to the User/UserOnline
 
         # Remove the currently attempted user-channel from the Channel Group (Room)
         async_to_sync(self.channel_layer.group_discard)(
