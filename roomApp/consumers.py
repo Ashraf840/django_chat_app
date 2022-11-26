@@ -243,24 +243,35 @@ class ChatConsumer(WebsocketConsumer):
         # [start] if-condition: check if no channel connected to the User/UserOnline
         async_to_sync(deactive_user_online_conn_db(user=self.user_obj, room=self.room_name, channelName=self.channel_name))
 
-        # Group send about disconnecting users
-        async_to_sync(self.channel_layer.group_send)(
-            self.room_group_name,
-            # pass a dictionary with custom key-value pairs
-            {
-                'type': 'deactive_user',
-                'user_conn_status_msg': f'User disconnected: {self.user_obj.username}',
-                'user_name': self.user_obj.username,
-            }
-        )
-        # [end] if-condition: check if no channel connected to the User/UserOnline
+        # [start/hits in the frontend of own+other connected users' browser]
+        # if-condition: check if no channel connected to the User/UserOnline
+        user_obj = User.objects.get(id=self.user_obj.id)
+        room_obj = Room.objects.get(slug=self.room_name)
+        user_online_obj = UserOnline.objects.get(user=user_obj, room=room_obj)
+        # Check how many active channels exist in the db for a specific user before making the user offline.
+        user_activated_channels = count_active_channels(user_online_obj=user_online_obj)
+        # Make the user offline only if the filter-queryset of that users active_channels is empty
+        if len(user_activated_channels) == 0:
 
-        # Remove the currently attempted user-channel from the Channel Group (Room)
-        async_to_sync(self.channel_layer.group_discard)(
-            self.room_group_name,
-            self.channel_name
-        )
-        print('Backend Consumer (Websocket): Disconnected!')
+            # Group send about disconnecting users
+            async_to_sync(self.channel_layer.group_send)(
+                self.room_group_name,
+                # pass a dictionary with custom key-value pairs
+                {
+                    'type': 'deactive_user',
+                    'user_conn_status_msg': f'User disconnected: {self.user_obj.username}',
+                    'user_name': self.user_obj.username,
+                }
+            )
+            # [end] if-condition: check if no channel connected to the User/UserOnline
+
+            # Remove the currently attempted user-channel from the Channel Group (Room)
+            async_to_sync(self.channel_layer.group_discard)(
+                self.room_group_name,
+                self.channel_name
+            )
+            print('Backend Consumer (Websocket): Disconnected!')
+        # [end] if-condition: check if no channel connected to the User/UserOnline
 
 
 """
