@@ -1,11 +1,32 @@
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import sync_to_async, async_to_sync
-from .models import Message, Room, UserOnline
+from .models import Message, Room, UserOnline, UserConnectedChannels
 from django.contrib.auth.models import User
 
 # Following my university-final-proj + The YT Video
 # Instead of using AsyncWebsocketConsumer, using only WebsocketConsumer
+
+
+# [Static Method] Used to create multiple user channels; Used in 'current_user_existence()'
+def create_channel_conn(userOnlineObj, channelName):
+    channelName = channelName.replace('specific.', '')  # remove prefix from each channel-name; mitigate db-storage
+    UserConnectedChannels.objects.create(
+        user_online=userOnlineObj,
+        channel_value=channelName
+    )
+
+
+# [Static Method] Used to remove same users multiple connected channels; Used in 'deactive_user_online_conn_db()'
+def remove_channel_conn(userOnlineObj, channelName):
+    try:
+        channelName = channelName.replace('specific.', '')
+        UserConnectedChannels.objects.get(
+            user_online=userOnlineObj,
+            channel_value=channelName
+        ).delete()
+    except UserConnectedChannels.DoesNotExist:
+        print("No such active channel exists!")
 
 
 # [Static Method] Return all the active users of current room
@@ -37,30 +58,44 @@ def make_user_offline(user):
 
 
 # [Static Method] Check currently connected user does exist in db "UserOnline" table; otherwise create record
-def current_user_existence(user, room):
+def current_user_existence(user, room, channelName):
     user_obj = User.objects.get(id=user.id)
     room_obj = Room.objects.get(slug=room)
+    # print(f'Channel Name from current_user_existence(): {channelName}')
     try:
-        user_exist = UserOnline.objects.get(user=user_obj, room=room_obj)
+        user_online_obj = UserOnline.objects.get(user=user_obj, room=room_obj)
         print("Try-block; User exists! from 'current_user_existence()' func!")
         # Check if the user's online; otherwise change it to True
-        make_user_online(user=user_exist)
+        make_user_online(user=user_online_obj)
+        # Create multiple channels for same user; since multiple channels for the same user is not constrained.
+        create_channel_conn(userOnlineObj=user_online_obj, channelName=channelName)
     except UserOnline.DoesNotExist:
         print("Except-block; User doesn't exist! from 'current_user_existence()' func!")
         # Create user online record
-        UserOnline.objects.create(user=user_obj, room=room_obj)
+        user_online_obj = UserOnline.objects.create(user=user_obj, room=room_obj)
+        create_channel_conn(userOnlineObj=user_online_obj, channelName=channelName)
 
 
 # Change existing user online status to offline
 # MIRROR METHOD of "current_user_existence"; Require REFACTOR TO MAKE THE CODE DRY;
 # (NB: put a logic for routing these functions into a single function.)
-def deactive_user_online_conn_db(user, room):
+def deactive_user_online_conn_db(user, room, channelName):
     user_obj = User.objects.get(id=user.id)
     room_obj = Room.objects.get(slug=room)
     try:
-        user_exist = UserOnline.objects.get(user=user_obj, room=room_obj)
-        # Check if the user's offline; otherwise change it to False
-        make_user_offline(user=user_exist)
+        user_online_obj = UserOnline.objects.get(user=user_obj, room=room_obj)
+        # Remove active user channels from db
+        remove_channel_conn(userOnlineObj=user_online_obj, channelName=channelName)
+        # Check how many channels exist in the db for a specific user before making the user offline.
+        # [Mitigating bug: Same user opening multiple duplicate tabs of the same chat room;
+        # then closing them make the user offline to other users of the channels
+        # as well as his/her own other duplicate tabs.]
+        user_activated_channels = UserConnectedChannels.objects.filter(user_online=user_online_obj)
+        print(f'Active channels of {user_obj}: {user_activated_channels}')
+        # Make the user offline only if the filter-queryset of that users active_channels is empty
+        if user_activated_channels.count() == 0:
+            # Check if the user's offline; otherwise change it to False
+            make_user_offline(user=user_online_obj)
     except UserOnline.DoesNotExist:
         print("User doesn't exist to make status offline!")
 
@@ -102,7 +137,7 @@ class ChatConsumer(WebsocketConsumer):
 
         async_to_sync(self.accept())
 
-        # Get all the active users of current room from asynchronously querying the db
+        # Get all the ACTIVE USERS OF THE CURRENT ROOM by asynchronously querying the db
         active_users = async_to_sync(existing_users(room=self.room_name))
         # print(dir(active_users))  # Checking the "AsyncToSync" object
         # print("Active users (queried from the db):", active_users.__dict__)
@@ -118,7 +153,7 @@ class ChatConsumer(WebsocketConsumer):
 
         # Check if the user already exist, check if the user already has "is_active=True", otherwise change that to "True".
         # If the user doesn't exist, add newly connected user into the DB.
-        async_to_sync(current_user_existence(user=self.user_obj, room=self.room_name))
+        async_to_sync(current_user_existence(user=self.user_obj, room=self.room_name, channelName=self.channel_name))
 
         # Group send about active users (Including newly connected)
         async_to_sync(self.channel_layer.group_send)(
@@ -197,9 +232,10 @@ class ChatConsumer(WebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.user_obj = self.scope['user']
         # print(f"Room: {self.room_name};  User: {self.user_obj}")
+        # print(f'Channel name (from "disconnect()" func): {self.channel_name}')
 
         # [start] if-condition: check if no channel connected to the User/UserOnline
-        async_to_sync(deactive_user_online_conn_db(user=self.user_obj, room=self.room_name))
+        async_to_sync(deactive_user_online_conn_db(user=self.user_obj, room=self.room_name, channelName=self.channel_name))
 
         # Group send about disconnecting users
         async_to_sync(self.channel_layer.group_send)(
