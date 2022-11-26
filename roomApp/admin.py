@@ -13,9 +13,9 @@ class UserOnlineAdmin(admin.ModelAdmin):
 
 
 class UserConnectedChannelsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'user_online', 'channel_value']
+    list_display = ['id', 'user_online', 'user_online_obj_char', 'channel_value']
     list_display_links = ['id']
-    search_fields = ['id', 'channel_value']
+    search_fields = ['id', 'user_online_obj_char', 'channel_value']
     list_per_page = 15
     ordering = ['id']
 
