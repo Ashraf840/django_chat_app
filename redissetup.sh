@@ -8,7 +8,7 @@ echo "Present Dir: $PWD"
 sudo apt install redis-server
 sudo systemctl restart redis
 
-# View network conn for TCP, routing tables, network interface & network protocol statsistics
+# View network conn for TCP, routing tables, network interface & network protocol statistics
 sudo apt install net-tools
 sudo netstat -lnp | grep redis
 

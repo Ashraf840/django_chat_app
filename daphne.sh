@@ -51,6 +51,7 @@ echo "teachatty_chat_app_daphne is about to be started!"
 
 sudo systemctl restart teachatty_chat_app_daphne.socket
 sudo systemctl restart teachatty_chat_app_daphne.service
+sudo systemctl enable teachatty_chat_app_daphne.service
 sudo systemctl status teachatty_chat_app_daphne.socket
 sudo systemctl status teachatty_chat_app_daphne.service
 
