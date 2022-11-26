@@ -44,5 +44,5 @@ class UserConnectedChannels(models.Model):
 
     def save(self, *args, **kwargs):
         if self.user_online_obj_char is None:
-            self.user_online_obj_char = self.user_online.room.name + "-" + self.user_online.user.username
+            self.user_online_obj_char = self.user_online.room.slug + "-" + self.user_online.user.username
         super(UserConnectedChannels, self).save(*args, **kwargs)
