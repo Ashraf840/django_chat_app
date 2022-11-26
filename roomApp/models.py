@@ -36,7 +36,13 @@ class UserOnline(models.Model):
 
 class UserConnectedChannels(models.Model):
     user_online = models.ForeignKey(UserOnline, related_name='UserConnectionChannels', on_delete=models.CASCADE)
+    user_online_obj_char = models.CharField(max_length=255, blank=True, null=True)
     channel_value = models.CharField(verbose_name='Channel Name', max_length=74, help_text='Every channel name consists of a specific 74 chars')
 
     class Meta:
         verbose_name_plural = 'User Channel Connections'
+
+    def save(self, *args, **kwargs):
+        if self.user_online_obj_char is None:
+            self.user_online_obj_char = self.user_online.room.name + "-" + self.user_online.user.username
+        super(UserConnectedChannels, self).save(*args, **kwargs)
