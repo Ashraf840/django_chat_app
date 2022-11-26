@@ -76,6 +76,16 @@ def current_user_existence(user, room, channelName):
         create_channel_conn(userOnlineObj=user_online_obj, channelName=channelName)
 
 
+# [Static Method] Count total connected channels of a user in the db
+def count_active_channels(user_online_obj):
+    # [Mitigating bug: Same user opening multiple duplicate tabs of the same chat room;
+    # then closing them make the user offline to other users of the channels
+    # as well as his/her own other duplicate tabs.]
+    user_activated_channels = UserConnectedChannels.objects.filter(user_online=user_online_obj)
+    print(f'Active channels: {user_activated_channels}')
+    print(f'Active channels queryset-length: {len(user_activated_channels)}')
+    return user_activated_channels
+
 # Change existing user online status to offline
 # MIRROR METHOD of "current_user_existence"; Require REFACTOR TO MAKE THE CODE DRY;
 # (NB: put a logic for routing these functions into a single function.)
@@ -87,13 +97,9 @@ def deactive_user_online_conn_db(user, room, channelName):
         # Remove active user channels from db
         remove_channel_conn(userOnlineObj=user_online_obj, channelName=channelName)
         # Check how many channels exist in the db for a specific user before making the user offline.
-        # [Mitigating bug: Same user opening multiple duplicate tabs of the same chat room;
-        # then closing them make the user offline to other users of the channels
-        # as well as his/her own other duplicate tabs.]
-        user_activated_channels = UserConnectedChannels.objects.filter(user_online=user_online_obj)
-        print(f'Active channels of {user_obj}: {user_activated_channels}')
-        # Make the user offline only if the filter-queryset of that users active_channels is empty
-        if user_activated_channels.count() == 0:
+        user_activated_channels = count_active_channels(user_online_obj=user_online_obj)
+        # Make the user offline only if the filter-queryset of that user's active_channels is empty
+        if len(user_activated_channels) == 0:
             # Check if the user's offline; otherwise change it to False
             make_user_offline(user=user_online_obj)
     except UserOnline.DoesNotExist:
