@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>
         {% block title %} {% endblock %}
-        | Django Chat</title>
+        | Teachatty</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -14,7 +14,7 @@
 
     <nav class="flex items-center justify-between px-4 py-6 bg-teal-800">
         <div>
-            <a href="{% url 'frontPage' %}" class="text-xl text-white">Django Chat</a>
+            <a href="{% url 'frontPage' %}" class="text-xl text-white">Teachatty</a>
         </div>
         <div class="flex items-center space-x-4">
             {% if request.user.is_authenticated %}
