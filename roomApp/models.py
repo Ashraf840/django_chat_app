@@ -29,3 +29,14 @@ class UserOnline(models.Model):
     is_active = models.BooleanField(verbose_name="Online", default=True)
     joined_at = models.DateTimeField(verbose_name="First Joined", auto_now_add=True)  # Updates on creation only
     last_update = models.DateTimeField(verbose_name="Last Activity", auto_now=True)  # Updates on creation & modification
+
+    class Meta:
+        verbose_name_plural = 'Users Online'
+
+
+class UserConnectedChannels(models.Model):
+    user_online = models.ForeignKey(UserOnline, related_name='UserConnectionChannels', on_delete=models.CASCADE)
+    channel_value = models.CharField(verbose_name='Channel Name', max_length=74, help_text='Every channel name consists of a specific 74 chars')
+
+    class Meta:
+        verbose_name_plural = 'User Channel Connections'

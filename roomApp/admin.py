@@ -12,6 +12,15 @@ class UserOnlineAdmin(admin.ModelAdmin):
     ordering = ['id']
 
 
+class UserConnectedChannelsAdmin(admin.ModelAdmin):
+    list_display = ['id', 'user_online', 'channel_value']
+    list_display_links = ['id']
+    search_fields = ['id', 'channel_value']
+    list_per_page = 15
+    ordering = ['id']
+
+
 admin.site.register(Room)
 admin.site.register(Message)
 admin.site.register(UserOnline, UserOnlineAdmin)
+admin.site.register(UserConnectedChannels, UserConnectedChannelsAdmin)
