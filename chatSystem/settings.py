@@ -33,9 +33,9 @@ ALLOWED_HOSTS = [
 ]
 
 # NB: Taking the name alias of the controllers
-LOGOUT_REDIRECT_URL = 'login'
-LOGIN_REDIRECT_URL = 'frontPage'
-LOGIN_URL = 'login'
+LOGOUT_REDIRECT_URL = 'auth/login'
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'auth/login'
 
 # Application definition
 INSTALLED_APPS = [
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'accountApp',
     'coreApp',
     'roomApp',
 ]
@@ -84,6 +85,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'chatSystem.wsgi.application'
 ASGI_APPLICATION = 'chatSystem.asgi.application'
 
+# Assign the Custom User Model Configuration
+AUTH_USER_MODEL = "accountApp.User"
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -166,6 +169,9 @@ STATICFILES_DIRS = [
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')   # Use in localhost-server instead of STATICFILES_DIRS; this dir will be created to store & server the static files while in the production
 
+# Media Configuration
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

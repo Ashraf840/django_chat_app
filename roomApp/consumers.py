@@ -1,8 +1,11 @@
 import json
+from datetime import datetime
+
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import sync_to_async, async_to_sync
 from .models import Message, Room, UserOnline, UserConnectedChannels
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from accountApp.models import User
 
 # Following my university-final-proj + The YT Video
 # Instead of using AsyncWebsocketConsumer, using only WebsocketConsumer
@@ -178,8 +181,13 @@ class ChatConsumer(WebsocketConsumer):
         data = json.loads(text_data)  # decode json-stringified data into python-dict
         # print(data)
         message = data['message']
+        current_date_time = data['current_date_time']
         username = data['username']
         room = data['room']
+
+        print(f'Current DateTime (sent from WS to channel-receive): {current_date_time}')
+        python_dt = datetime.fromtimestamp(current_date_time)
+        print(f'Python converted data (from JS timestamps): {python_dt}')
 
         # before sending the msg to the channel-group, store the msg into db
         async_to_sync(save_message(

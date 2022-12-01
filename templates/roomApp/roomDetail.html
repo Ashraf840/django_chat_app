@@ -79,7 +79,7 @@
                 </div>
                 <div></div>
                 <div class="bg-teal-300 flex items-center">
-                    <small style="font-size:.7rem">date/time</small>
+                    <small style="font-size:.7rem">${data.message.date_added}</small>
                 </div>
             </div>`;
             document.querySelector('#chat-messages').innerHTML += chatHtml;
@@ -119,18 +119,21 @@
         console.log('onclose');
     }
 
-    // SEND BUTTON FUNC
+    // MESSAGE SEND BUTTON FUNC
     send.onclick = function (e) {
         e.preventDefault();     // prevent from submitting as a post-req
         const messageInputDom = document.querySelector('#chat-message-input');
         const message = messageInputDom.value;
         // console.log(`${message}`);
+        const current_dt_obj = new Date();
+        const current_date_time = current_dt_obj.getTime() / 1000;
 
         // Send msg to backend, only if the message is not empty
         if (message) {
             // Send the message to backend consumer
             chatSocket.send(JSON.stringify({
                 'message': message,
+                'current_date_time': current_date_time,
                 'username': username,
                 'room': roomName,
             }));

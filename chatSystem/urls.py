@@ -15,9 +15,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+# Library for Media URL Config
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('coreApp.urls')),
-    path('room/', include('roomApp.urls')),
+    path('auth/', include(('accountApp.urls', 'app_name'), namespace='AccountApplication')),
+    path('', include(('coreApp.urls', 'app_name'), namespace='CoreApplication')),
+    path('room/', include(('roomApp.urls', 'app_name'), namespace='RoomApplication')),
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

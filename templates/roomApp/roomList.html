@@ -18,7 +18,7 @@
 
     <div class="p-10 lg:p-20 bg-red-500 grid grid-cols-4 gap-x-8 gap-y-8">
         {% for room in rooms %}
-        <a href="{% url 'roomDetail' room.slug %}" id="card-room-thumbnail">
+        <a href="{% url 'roomApp:roomDetail' room.slug %}" id="card-room-thumbnail">
             <div class="max-w-sm rounded overflow-hidden shadow-lg bg-sky-300">
                 <img class="w-full"
                      src="https://c4.wallpaperflare.com/wallpaper/275/953/312/3d-digital-art-abstract-simple-background-wallpaper-preview.jpg"

@@ -2,6 +2,10 @@ from django.contrib import admin
 from .models import *
 
 
+class RoomAdmin(admin.ModelAdmin):
+    prepopulated_fields = {"slug": ("name",)}  # Autopopulate the slug-field of chatRoom-name, while writing teh room-name
+
+
 class UserOnlineAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'room', 'is_active', 'joined_at', 'last_update']
     list_display_links = ['id']
@@ -20,7 +24,7 @@ class UserConnectedChannelsAdmin(admin.ModelAdmin):
     ordering = ['id']
 
 
-admin.site.register(Room)
+admin.site.register(Room, RoomAdmin)
 admin.site.register(Message)
 admin.site.register(UserOnline, UserOnlineAdmin)
 admin.site.register(UserConnectedChannels, UserConnectedChannelsAdmin)
