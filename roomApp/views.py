@@ -20,8 +20,8 @@ def roomDetail(request, slug):
     messages = Message.objects.filter(room=room)[:25]  # fetch the first 25 messages of this room
     people = [i for i in range(1)]  # dummy sample
     # sample = [i for i in range(1)]
-    for m in messages:
-        print(f"Msg dates: {m.date_added}")
+    # for m in messages:
+    #     print(f"Msg dates: {m.date_added}")
     context = {
         'title': room.name,
         'room': room,

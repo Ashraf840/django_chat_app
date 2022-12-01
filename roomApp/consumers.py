@@ -1,6 +1,4 @@
 import json
-from datetime import datetime
-
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import sync_to_async, async_to_sync
 from .models import Message, Room, UserOnline, UserConnectedChannels
@@ -36,9 +34,9 @@ def remove_channel_conn(userOnlineObj, channelName):
 def existing_users(room):
     room_obj = Room.objects.get(slug=room)
     # room_obj = Room.objects.get(slug=self.room_name)
-    print(f"Room obj (from 'existing_users()' func): {room_obj}")
+    # print(f"Room obj (from 'existing_users()' func): {room_obj}")
     users_obj = UserOnline.objects.filter(room=room_obj, is_active=True)
-    print(f"Existing active users (from 'existing_users()' func): {users_obj}")
+    # print(f"Existing active users (from 'existing_users()' func): {users_obj}")
     return users_obj
 
 
@@ -46,7 +44,7 @@ def existing_users(room):
 def make_user_online(user):
     # Check if the user's online; otherwise change it to True
     if not user.is_active:
-        print("User wasn't active until now!")
+        # print("User wasn't active until now!")
         user.is_active = True
         user.save()
 
@@ -55,7 +53,7 @@ def make_user_online(user):
 def make_user_offline(user):
     # Check if the user's offline; otherwise change it to False
     if user.is_active:
-        print("User was active until now!")
+        # print("User was active until now!")
         user.is_active = False
         user.save()
 
@@ -67,7 +65,7 @@ def current_user_existence(user, room, channelName):
     # print(f'Channel Name from current_user_existence(): {channelName}')
     try:
         user_online_obj = UserOnline.objects.get(user=user_obj, room=room_obj)
-        print("Try-block; User exists! from 'current_user_existence()' func!")
+        # print("Try-block; User exists! from 'current_user_existence()' func!")
         # Check if the user's online; otherwise change it to True
         make_user_online(user=user_online_obj)
         # Create multiple channels for same user; since multiple channels for the same user is not constrained.
@@ -85,8 +83,8 @@ def count_active_channels(user_online_obj):
     # then closing them make the user offline to other users of the channels
     # as well as his/her own other duplicate tabs.]
     user_activated_channels = UserConnectedChannels.objects.filter(user_online=user_online_obj)
-    print(f'Active channels: {user_activated_channels}')
-    print(f'Active channels queryset-length: {len(user_activated_channels)}')
+    # print(f'Active channels: {user_activated_channels}')
+    # print(f'Active channels queryset-length: {len(user_activated_channels)}')
     return user_activated_channels
 
 # Change existing user online status to offline
@@ -113,7 +111,8 @@ def deactive_user_online_conn_db(user, room, channelName):
 def save_message(message, username, room):
     user = User.objects.get(username=username)
     room = Room.objects.get(slug=room)
-    Message.objects.create(room=room, user=user, content=message)
+    msg = Message.objects.create(room=room, user=user, content=message)
+    return msg
 
 
 # Consumer Class
@@ -150,9 +149,9 @@ class ChatConsumer(WebsocketConsumer):
         active_users = async_to_sync(existing_users(room=self.room_name))
         # print(dir(active_users))  # Checking the "AsyncToSync" object
         # print("Active users (queried from the db):", active_users.__dict__)
-        print("Active users (queried from the db):", list(active_users.awaitable))
+        # print("Active users (queried from the db):", list(active_users.awaitable))
         user_names = [u.user.username for u in list(active_users.awaitable) if u.user.username != self.user_obj.username]    # Ignore the current user's username by adding a condition into this list-comprehension
-        print(f"Active users (usernames only; except current user's username): {user_names}")
+        # print(f"Active users (usernames only; except current user's username): {user_names}")
 
         # Send the query object only to the newly connected user's web-socket; NOT TO ALL THE CHANNELS OF THIS GROUP (Room)
         self.send(text_data=json.dumps({
@@ -181,20 +180,16 @@ class ChatConsumer(WebsocketConsumer):
         data = json.loads(text_data)  # decode json-stringified data into python-dict
         # print(data)
         message = data['message']
-        current_date_time = data['current_date_time']
         username = data['username']
         room = data['room']
 
-        print(f'Current DateTime (sent from WS to channel-receive): {current_date_time}')
-        python_dt = datetime.fromtimestamp(current_date_time)
-        print(f'Python converted data (from JS timestamps): {python_dt}')
-
         # before sending the msg to the channel-group, store the msg into db
-        async_to_sync(save_message(
+        msg = async_to_sync(save_message(
             room=room,
             username=username,
             message=message
         ))
+        # print(f"Saved msg: {msg.awaitable.date_added}")
 
         # send the data to channel-group
         async_to_sync(self.channel_layer.group_send)(
@@ -203,6 +198,7 @@ class ChatConsumer(WebsocketConsumer):
             {
                 'type': 'chat_message',  # will be used to call as a method
                 'message': message,
+                'msg_dt': str(msg.awaitable.date_added),
                 'username': username,
                 'room': room,
             }
@@ -212,11 +208,14 @@ class ChatConsumer(WebsocketConsumer):
     # "event" param contains other keys (except 'type' key) from inside the dictionary passed as param in "channel_layer.group_send"
     def chat_message(self, event):
         message = event['message']
+        msg_dt = event['msg_dt']
+        # print(f'Msg current date/time chat_message() func: {msg_dt}')
         username = event['username']
         room = event['room']
         # Send to the room in the frontend; send in a json-format; send func responsible for sending data to frontend
         self.send(text_data=json.dumps({
             'message': message,
+            'msg_dt': msg_dt,
             'username': username,
             'room': room,
         }))

@@ -65,7 +65,19 @@
 
         // Check if the data.message is not empty; Append chat-msg into chat-body
         if (data.message) {
-            // console.log(`Message sent from the backend: ${data.message}`); // access 'message' key from the 'data' object; since the data-obj contains certain key-value pair from the backend; more detail into 'chat_message' method in the "roomApp/consumers.py" file
+            const msg_dt = new Date(data.msg_dt);
+            const month = msg_dt.toLocaleString('default', {month: 'short',});
+            const date = msg_dt.getDay();
+            const year = msg_dt.getFullYear();
+            let hours = msg_dt.getHours();
+            let minutes = msg_dt.getMinutes();
+            const ampm = hours >= 12 ? 'p.m.' : 'a.m.';
+            hours = hours % 12;
+            hours = hours ? hours : 12; // the hour '0' should be '12'
+            minutes = minutes < 10 ? '0'+minutes : minutes;
+            const strTime = hours + ':' + minutes + ' ' + ampm;
+            const msg_dateTime = `${String(month)} ${String(date)}, ${String(year)}, ${String(strTime)}`;
+
 
             // Append HTML code-block into the chat-body section
             let chatHtml = `<div class="grid grid-cols-9 bg-gray-200 px-6 h-12 my-7 mx-5 rounded-xl">
@@ -79,7 +91,7 @@
                 </div>
                 <div></div>
                 <div class="bg-teal-300 flex items-center">
-                    <small style="font-size:.7rem">${data.message.date_added}</small>
+                    <small style="font-size:.7rem">${strTime}</small>
                 </div>
             </div>`;
             document.querySelector('#chat-messages').innerHTML += chatHtml;
@@ -125,15 +137,12 @@
         const messageInputDom = document.querySelector('#chat-message-input');
         const message = messageInputDom.value;
         // console.log(`${message}`);
-        const current_dt_obj = new Date();
-        const current_date_time = current_dt_obj.getTime() / 1000;
 
         // Send msg to backend, only if the message is not empty
         if (message) {
             // Send the message to backend consumer
             chatSocket.send(JSON.stringify({
                 'message': message,
-                'current_date_time': current_date_time,
                 'username': username,
                 'room': roomName,
             }));
