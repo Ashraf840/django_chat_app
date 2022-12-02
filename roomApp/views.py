@@ -3,6 +3,14 @@ from .models import *
 from django.contrib.auth.decorators import login_required
 
 
+# ---------------------------------- ************** IMPORTANT
+# #################
+# MAKE CUSTOM DECORATOR;
+# IT'S THROWING ERROR WHILE I DELETED ALL THE USERS FROM DJ-ADMIN-PANEL & RELOADED THE ROOM-LIST PAGE,
+# THE DECORATOR FUNC ABOVE THE 'roomsList' FUNC IS NOT PERFORMING AS REQUIRED
+# #################
+# ---------------------------------- ************** IMPORTANT
+
 @login_required
 def roomsList(request):
     rooms = Room.objects.all()
