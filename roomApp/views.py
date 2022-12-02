@@ -11,7 +11,7 @@ from django.contrib.auth.decorators import login_required
 # #################
 # ---------------------------------- ************** IMPORTANT
 
-@login_required
+@login_required(login_url='accountApp:login')
 def roomsList(request):
     rooms = Room.objects.all()
     # rooms = [i for i in range(9)]
@@ -22,7 +22,7 @@ def roomsList(request):
     return render(request, 'roomApp/roomList.html', context)
 
 
-@login_required
+@login_required(login_url='accountApp:login')
 def roomDetail(request, slug):
     room = Room.objects.get(slug=slug)
     messages = Message.objects.filter(room=room)[:25]  # fetch the first 25 messages of this room

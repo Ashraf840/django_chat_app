@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect
 from .forms import UserLoginForm, SignupForm
 from django.contrib.auth import authenticate, login, logout
+from .decorators import stop_authenticated_users
 
 
+@stop_authenticated_users
 def signup(request):
     context = {
         'title': 'Signup',
@@ -26,6 +28,7 @@ def userLogout(request):
     return redirect('accountApp:login')
 
 
+@stop_authenticated_users
 def userLogin(request):
     context = {
         'title': 'User Login',
