@@ -189,11 +189,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # }
 
 
-# Email Configuration [SMTP]
+# Email Configuration [SMTP] - Zoho Mailing Service
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'enamulmajid021@gmail.com'
-EMAIL_HOST_PASSWORD = 'xdjrlgygiiixqrbn'
+EMAIL_HOST_USER = 'no-reply@teachatty.xyz'
+# EMAIL_HOST_PASSWORD = 'L6*2ox6qs6KY'    # Used while Two-Factor Auth is disabled;
+EMAIL_HOST_PASSWORD = 'nGbrdqPsWrVy'   # Application-specific Password; used when Two-Factor Auth is enabled;
 

@@ -37,7 +37,7 @@ def emailVerification(user_email=None, *args, **kwargs):
     activate_url = 'http://' + domain + link
 
     email_subject = 'Activate you account - Teachatty'
-    from_email = 'enamulmajid021@gmail.com'
+    from_email = 'no-reply@teachatty.xyz'
     to_email = kwargs['user'].email
 
     # Email templates (both text & html); will be rendered then sent
@@ -46,6 +46,7 @@ def emailVerification(user_email=None, *args, **kwargs):
     text_content = render_to_string(
         'accountApp/accnt_activation_email_template/regular_user/account_activation.txt', context)
     # Color Palette Used: https://colorhunt.co/palette/393e466d9886f2e7d5f7f7f7
+    # Email HTML Template: https://bbbootstrap.com/snippets/confirm-account-email-template-17848137
     html_content = render_to_string(
         'accountApp/accnt_activation_email_template/regular_user/account_activation.html', context)
 
