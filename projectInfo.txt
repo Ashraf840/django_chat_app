@@ -54,4 +54,7 @@ Stage-3:
 
 -------------------------------------------- Backlogs
 # Define functionality for active users in each channel. [Done; documentation is yet to complete]
-
+# Check whether the user has an active status while logging-in,
+    If not then remind him of activating his/her account using email verification, which is yet to complete.
+    If the token is lost, provide a function for generating another email-verification token.
+# When a user is deleted, ensure his/her messages retained afterwards as "Anonymous User".
