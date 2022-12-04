@@ -36,5 +36,22 @@ Stage-3:
 
 
 
+
+
+
+
+
+################# Email Verification
+- Currently Google doesn't allow any 3rd party app to use its email service,
+    thus they provide app-password.
+    Collected a solution to from stackoverflow.
+    [Ref]:
+    - https://stackoverflow.com/a/28421995
+- Referencing the URL to acquire an app password.
+    - https://support.google.com/accounts/answer/185833
+
+
+
 -------------------------------------------- Backlogs
-# Define functionality for active users in each channel.
+# Define functionality for active users in each channel. [Done; documentation is yet to complete]
+

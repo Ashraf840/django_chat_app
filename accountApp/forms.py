@@ -9,6 +9,12 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ['email', 'username', 'password1', 'password2']
 
+    def save(self):
+        user = super().save(commit=False)
+        user.is_active = False
+        user.save()
+        return user
+
 
 # Common User Login Form
 class UserLoginForm(forms.ModelForm):
