@@ -201,7 +201,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 DEFAULT_FROM_EMAIL = 'no-reply@teachatty.xyz'
 
-SERVER_MAIL = 'no-reply@teachatty.xyz'
+# SERVER_MAIL = 'no-reply@teachatty.xyz'
 
 # Example for using Zoho Mail as email sending backend
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
