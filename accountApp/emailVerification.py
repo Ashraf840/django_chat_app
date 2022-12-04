@@ -1,6 +1,6 @@
 import threading
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, send_mail
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.urls import reverse
@@ -50,8 +50,9 @@ def emailVerification(user_email=None, *args, **kwargs):
     html_content = render_to_string(
         'accountApp/accnt_activation_email_template/regular_user/account_activation.html', context)
 
-    msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
-    msg.attach_alternative(html_content, "text/html")
+    # msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
+    # msg.attach_alternative(html_content, "text/html")
+    msg = send_mail(email_subject, text_content, from_email, [to_email], html_message=html_content)
     EmailThread(msg).start()
 
 
