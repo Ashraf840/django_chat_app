@@ -203,12 +203,14 @@ DEFAULT_FROM_EMAIL = 'no-reply@teachatty.xyz'
 
 SERVER_MAIL = 'no-reply@teachatty.xyz'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
 # Example for using Zoho Mail as email sending backend
-EMAIL_USE_TLS = True
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_USE_TLS = True
+# EMAIL_PORT = 587
+EMAIL_BACKEND = 'django_smtp_ssl.SSLEmailBackend'
 EMAIL_HOST = 'smtp.zoho.com'
-EMAIL_PORT = 587
+EMAIL_USE_SSL = True
+EMAIL_PORT = 465
 EMAIL_HOST_USER = 'no-reply@teachatty.xyz'
 EMAIL_HOST_PASSWORD = 'nGbrdqPsWrVy'
 
