@@ -34,10 +34,10 @@ def signup(request):
 
             # send test mail
             # emailVerification(req_dict_domain, user_email=form.cleaned_data['email'], user=user)
-            # emailVerification(req_dict_domain=req_dict_domain, user=user)
-            # return redirect('accountApp:check_email_verification')
-            login(request, user)
-            return redirect('coreApp:home')
+            emailVerification(req_dict_domain=req_dict_domain, user=user)
+            return redirect('accountApp:check_email_verification')
+            # login(request, user)
+            # return redirect('coreApp:home')
         # [OPTIONAL]: NOT REQUIRED CURRENTLY; SINCE SIGNUP FORM IS CONSTRUCTED INTO HTML
         else:
             #     print("No POST method is called!")
