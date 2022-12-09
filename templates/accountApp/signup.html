@@ -2,43 +2,76 @@
 
 {% block title %} {{ title }} {% endblock %}
 
+{% block customCSS %}
+<style>
+    .crossBtnDiv {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="p-10 lg:p-20 text-center">
     <h1 class="text-3xl lg:text-6xl text-white">Sign up</h1>
 </div>
 
 <form method="POST" class="lg:w-1/4 px-4 mx-auto">
-  {% csrf_token %}
-  <div class="mb-5">
-    <label for="email" class="text-white">email</label>
-    <input type="text" id="email" name="email" class="w-full mt-2 px-4 py-2 rounded-xl">
-  </div>
+    {% csrf_token %}
+    <div class="mb-5">
+        <label for="email" class="text-white">email</label>
+        <input type="text" id="email" name="email" class="w-full mt-2 px-4 py-2 rounded-xl">
+    </div>
 
-  <div class="mb-5">
-    <label for="username" class="text-white">Username</label>
-    <input type="text" id="username" name="username" class="w-full mt-2 px-4 py-2 rounded-xl">
-  </div>
+    <div class="mb-5">
+        <label for="username" class="text-white">Username</label>
+        <input type="text" id="username" name="username" class="w-full mt-2 px-4 py-2 rounded-xl">
+    </div>
 
-  <div class="mb-5">
-    <label for="password1" class="text-white">Password</label>
-    <input type="password" id="password1" name="password1" class="w-full mt-2 px-4 py-2 rounded-xl">
-  </div>
+    <div class="mb-5">
+        <label for="password1" class="text-white">Password</label>
+        <input type="password" id="password1" name="password1" class="w-full mt-2 px-4 py-2 rounded-xl">
+    </div>
 
-  <div class="mb-5">
-    <label for="password2" class="text-white">Repeat Password</label>
-    <input type="password" id="password2" name="password2" class="w-full mt-2 px-4 py-2 rounded-xl">
-  </div>
+    <div class="mb-5">
+        <label for="password2" class="text-white">Repeat Password</label>
+        <input type="password" id="password2" name="password2" class="w-full mt-2 px-4 py-2 rounded-xl">
+    </div>
 
-  {% if form.errors %}
+    {% if form.errors %}
     {% for field in form %}
-      {% for error in field.errors %}
-        <div class="mb-5 p-4 rounded-xl bg-red-300 text-white">
-          <p>{{ error }}</p>
+    {% for error in field.errors %}
+    <div class="flash_msg mb-5 rounded-xl flex">
+        <div class="p-5 rounded-l-xl crossBtnDiv bg-red-400 flex items-center" id="crossBtnDiv_formError">
+            <span><strong>&#9587</strong></span>
         </div>
-      {% endfor %}
+        <div class="w-11/12 p-5 rounded-r-xl bg-red-500">
+            <p><strong>{{ error }}</strong></p>
+        </div>
+    </div>
     {% endfor %}
-  {% endif %}
+    {% endfor %}
+    {% endif %}
 
-  <button type="submit" class="px-5 py-3 rounded-xl text-white bg-teal-800 hover:bg-teal-700">Submit</button>
+    <button type="submit" class="px-5 py-3 rounded-xl text-white bg-teal-800 hover:bg-teal-700">Submit</button>
 </form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const error_div = document.querySelector(".flash_msg");
+    const close_btn_div_formError = document.querySelector("#crossBtnDiv_formError");
+    const crossBtnDiv_msg = document.querySelector("#crossBtnDiv_msg");
+
+    if (close_btn_div_formError) {
+        close_btn_div_formError.addEventListener("click", (e) => {
+            error_div.remove();
+        });
+    }
+
+    if (crossBtnDiv_msg) {
+        crossBtnDiv_msg.addEventListener("click", (e) => {
+            error_div.remove();
+        });
+    }
+</script>
 {% endblock %}

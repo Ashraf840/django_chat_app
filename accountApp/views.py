@@ -34,15 +34,15 @@ def signup(request):
 
             # send test mail
             # emailVerification(req_dict_domain, user_email=form.cleaned_data['email'], user=user)
-            emailVerification(req_dict_domain=req_dict_domain, user=user)
-            return redirect('accountApp:check_email_verification')
-            # login(request, user)
-            # return redirect('coreApp:home')
+            # emailVerification(req_dict_domain=req_dict_domain, user=user)
+            # return redirect('accountApp:check_email_verification')
+            login(request, user)
+            return redirect('coreApp:home')
         # [OPTIONAL]: NOT REQUIRED CURRENTLY; SINCE SIGNUP FORM IS CONSTRUCTED INTO HTML
-        # else:
-        #     print("No POST method is called!")
-        #     form = SignupForm()
-        #     context['form'] = form
+        else:
+            #     print("No POST method is called!")
+            #     form = SignupForm()
+            context['form'] = form
 
     return render(request, 'accountApp/signup.html', context)
 
@@ -73,6 +73,9 @@ def userLogin(request):
                 # "django.contrib.messages" lib contains auth-error msg
                 messages.info(request, "Invalid Credentials!")
         else:
+            # print('Form error:', form.errors)
+            # print('Form email-field error:', form.errors.get('email'))
+            # print('Form password-field error:', form.errors.get('password'))
             # "form.errors" passed to frontend using context-dict; form-field-specific-errors
             context['form'] = form  # pass the form.errors into HTML
 
