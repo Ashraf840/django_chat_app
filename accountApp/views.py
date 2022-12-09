@@ -73,7 +73,7 @@ def userLogin(request):
                 # "django.contrib.messages" lib contains auth-error msg
                 messages.info(request, "Invalid Credentials!")
         else:
-            # "form.errors" passed to frontend using context-dict
+            # "form.errors" passed to frontend using context-dict; form-field-specific-errors
             context['form'] = form  # pass the form.errors into HTML
 
     return render(request, 'accountApp/login.html', context)
