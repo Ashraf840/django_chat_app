@@ -25,17 +25,8 @@ class UserLoginForm(forms.ModelForm):
         fields = ['email', 'password']
 
     def clean(self):
+        # NB: use this func in order to make custom-validation of each/certain field(s)
         if self.is_valid():
             email = self.cleaned_data['email']
             password = self.cleaned_data['password']
-
-            # Raise auth-error where this form gets rendered
-            if not authenticate(email=email, password=password):
-                raise forms.ValidationError("Invalid Credentials! Please insert correct email & password.")
-
-    # def __init__(self, *args, **kwargs):
-    #     super(UserLoginForm, self).__init__(*args, **kwargs)
-    #     self.fields['email'].widget.attrs['class'] = 'form-control'
-    #     self.fields['email'].widget.attrs['placeholder'] = 'Email Address'
-    #     self.fields['password'].widget.attrs['class'] = 'form-control'
-    #     self.fields['password'].widget.attrs['placeholder'] = 'Enter Password'
+        return self.cleaned_data

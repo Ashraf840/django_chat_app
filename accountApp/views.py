@@ -3,8 +3,12 @@ from .forms import UserLoginForm, SignupForm
 from django.contrib.auth import authenticate, login, logout
 from .decorators import stop_authenticated_users
 from .emailVerification import emailVerification
+from django.contrib import messages
 
 
+# TODO: Add flash msg in auth system.
+# TODO: Make the auth system under class-based views.
+# TODO: Make password-reset using email-verification feature.
 
 
 def check_email_verification(request):
@@ -12,8 +16,6 @@ def check_email_verification(request):
         'title': 'Email Verification',
     }
     return render(request, 'accountApp/reg_process_templates/check_email_verification.html', context)
-
-
 
 
 @stop_authenticated_users
@@ -52,24 +54,26 @@ def userLogout(request):
 
 @stop_authenticated_users
 def userLogin(request):
-    context = {
-        'title': 'User Login',
-    }
+    context = {'title': 'User Login', 'form': UserLoginForm()}
 
     # [GET req] Render the form while the page loads
-    form = UserLoginForm()
-    context['loginForm'] = UserLoginForm()
+    # form = UserLoginForm()
 
     if request.POST:
         form = UserLoginForm(request.POST)
-
-        email = request.POST['email']
-        password = request.POST['password']
-
         if form.is_valid():
+            # NB: instead of request.POST['xyz']; it's best practice to use form.cleaned_data
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
             user = authenticate(request, email=email, password=password)
             if user is not None:
                 login(request, user)
                 return redirect('coreApp:home')
+            else:
+                # "django.contrib.messages" lib contains auth-error msg
+                messages.info(request, "Invalid Credentials!")
+        else:
+            # "form.errors" passed to frontend using context-dict
+            context['form'] = form  # pass the form.errors into HTML
 
     return render(request, 'accountApp/login.html', context)

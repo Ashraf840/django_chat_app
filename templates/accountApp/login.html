@@ -2,33 +2,81 @@
 
 {% block title %} {{ title }} {% endblock %}
 
+
+{% block customCSS %}
+<style>
+    .crossBtnDiv {
+        cursor: pointer;
+    }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="p-10 lg:p-20 text-center">
     <h1 class="text-3xl lg:text-6xl text-white">Login</h1>
 </div>
 
 <form method="POST" class="lg:w-1/4 px-4 mx-auto">
-  {% csrf_token %}
-  <div class="mb-5">
-    <label for="email" class="text-white">Email</label>
-    <input type="text" id="email" name="email" class="w-full mt-2 px-4 py-2 rounded-xl">
-  </div>
+    {% csrf_token %}
+    <div class="mb-5">
+        <label for="email" class="text-white">Email</label>
+        <input type="text" id="email" name="email" class="w-full mt-2 px-4 py-2 rounded-xl">
+    </div>
 
-  <div class="mb-5">
-    <label for="password" class="text-white">Password</label>
-    <input type="password" id="password" name="password" class="w-full mt-2 px-4 py-2 rounded-xl">
-  </div>
+    <div class="mb-5">
+        <label for="password" class="text-white">Password</label>
+        <input type="password" id="password" name="password" class="w-full mt-2 px-4 py-2 rounded-xl">
+    </div>
 
-  {% if form.errors %}
-    {% for field in form %}
-      {% for error in field.errors %}
-        <div class="mb-5 p-4 rounded-xl bg-red-300 text-white">
-          <p>{{ error }}</p>
+    {% if form.errors %}
+    {% for fields in form %}
+    {% for error in fields.errors %}
+    <div class="errorDiv mb-5 rounded-xl flex">
+        <div class="p-5 rounded-l-xl crossBtnDiv bg-red-400" id="crossBtnDiv_formError">
+            <span><strong>&#9587</strong></span>
         </div>
-      {% endfor %}
+        <div class="w-11/12 p-5 rounded-r-xl bg-red-500">
+            <p><strong>{{ error }}</strong></p>
+        </div>
+    </div>
     {% endfor %}
-  {% endif %}
+    {% endfor %}
+    {% endif %}
 
-  <button type="submit" class="px-5 py-3 rounded-xl text-white bg-teal-800 hover:bg-teal-700">Login</button>
+    {% if messages %}
+    {% for msg in messages %}
+    <div class="errorDiv mb-5 rounded-xl flex">
+        <div class="p-5 rounded-l-xl crossBtnDiv bg-red-400" id="crossBtnDiv_msg">
+            <span><strong>&#9587</strong></span>
+        </div>
+        <div class="w-11/12 p-5 rounded-r-xl bg-red-500">
+            <p><strong>{{ msg }}</strong></p>
+        </div>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <button type="submit" class="px-5 py-3 rounded-xl text-white bg-teal-800 hover:bg-teal-700">Login</button>
 </form>
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    const error_div = document.querySelector(".errorDiv");
+    const close_btn_div_formError = document.querySelector("#crossBtnDiv_formError");
+    const crossBtnDiv_msg = document.querySelector("#crossBtnDiv_msg");
+
+    if (close_btn_div_formError) {
+        close_btn_div_formError.addEventListener("click", (e) => {
+            error_div.remove();
+        });
+    }
+
+    if (crossBtnDiv_msg) {
+        crossBtnDiv_msg.addEventListener("click", (e) => {
+            error_div.remove();
+        });
+    }
+</script>
 {% endblock %}

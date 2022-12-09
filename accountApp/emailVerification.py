@@ -50,6 +50,8 @@ def emailVerification(user_email=None, *args, **kwargs):
     html_content = render_to_string(
         'accountApp/accnt_activation_email_template/regular_user/account_activation.html', context)
 
+    # Bug Fix: Email was not able to be sent using ZOHO mailing service
+    # [Ref]: https://stackoverflow.com/a/49894619
     # msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
     # msg.attach_alternative(html_content, "text/html")
     msg = send_mail(email_subject, text_content, from_email, [to_email], html_message=html_content)

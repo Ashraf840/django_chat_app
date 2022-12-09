@@ -60,5 +60,5 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ["username"]
 
     def save(self, *args, **kwargs):
-        print(f"profile pic: {self.profile_pic}")
+        # print(f"profile pic: {self.profile_pic}")
         super(User, self).save(*args, **kwargs)
