@@ -33,7 +33,7 @@ def signup(request):
             req_dict_domain = request.headers['Host']
 
             # send test mail
-            # emailVerification(req_dict_domain, user_email=form.cleaned_data['email'], user=user)
+            # emailVerification(req_dict_domain, user_email=form.cleaned_data['email'], user=user)      # NOT USING; REDUNDANT UNTIL USING THE "form.cleaned_data['email']"
             emailVerification(req_dict_domain=req_dict_domain, user=user)
             return redirect('accountApp:check_email_verification')
             # login(request, user)
@@ -74,8 +74,18 @@ def userLogin(request):
                 messages.info(request, "Invalid Credentials!")
         else:
             # print('Form error:', form.errors)
-            # print('Form email-field error:', form.errors.get('email'))
-            # print('Form password-field error:', form.errors.get('password'))
+
+            # if form.errors.get('email') is not None:
+            #     print('Form email-field error:', form.errors.get('email'))
+            # if form.errors.get('password') is not None:
+            #     print('Form password-field error:', form.errors.get('password'))
+
+            # print('Form fields (email-error):', dir(form.fields.get('email')))
+            # print('Form fields (email-error):', form.fields.get('email').error_messages)
+            # print('Form fields (password-error):', form.fields.get('password').error_messages)
+            # print('Form fields (password-error):', form.fields.get('password'))
+
+
             # "form.errors" passed to frontend using context-dict; form-field-specific-errors
             context['form'] = form  # pass the form.errors into HTML
 

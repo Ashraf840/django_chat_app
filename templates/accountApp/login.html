@@ -20,29 +20,37 @@
     {% csrf_token %}
     <div class="mb-5">
         <label for="email" class="text-white">Email</label>
-        <input type="text" id="email" name="email" class="w-full mt-2 px-4 py-2 rounded-xl">
+        <input type="text" id="email" name="email" class="w-full mt-2 px-4 py-2 rounded-xl" required>
     </div>
 
     <div class="mb-5">
         <label for="password" class="text-white">Password</label>
-        <input type="password" id="password" name="password" class="w-full mt-2 px-4 py-2 rounded-xl">
+        <input type="password" id="password" name="password" class="w-full mt-2 px-4 py-2 rounded-xl" required>
     </div>
 
-    {% if form.errors %}
-    {% for fields in form %}
-    {% for error in fields.errors %}
-    <div class="flash_msg mb-5 rounded-xl flex">
-        <div class="p-5 rounded-l-xl crossBtnDiv bg-red-400 flex items-center" id="crossBtnDiv_formError">
-            <span><strong>&#9587</strong></span>
+    <!-- Form fields errors -->
+    {% if form.email.errors %}
+        <div class="flash_msg_email mb-5 rounded-xl flex">
+            <div class="p-5 rounded-l-xl crossBtnDiv bg-red-400 flex items-center" id="crossBtnDiv_formError_email">
+                <span><strong>&#9587</strong></span>
+            </div>
+            <div class="w-11/12 p-5 rounded-r-xl bg-red-500">
+                <p><strong>Email: {{ form.email.errors|striptags }}</strong></p>
+            </div>
         </div>
-        <div class="w-11/12 p-5 rounded-r-xl bg-red-500">
-            <p><strong>{{ error }}</strong></p>
+    {% endif %}
+    {% if form.password.errors %}
+        <div class="flash_msg_pass mb-5 rounded-xl flex">
+            <div class="p-5 rounded-l-xl crossBtnDiv bg-red-400 flex items-center" id="crossBtnDiv_formError_pass">
+                <span><strong>&#9587</strong></span>
+            </div>
+            <div class="w-11/12 p-5 rounded-r-xl bg-red-500">
+                <p><strong>Password: {{ form.password.errors|striptags }}</strong></p>
+            </div>
         </div>
-    </div>
-    {% endfor %}
-    {% endfor %}
     {% endif %}
 
+    <!-- User auth error as flash msg -->
     {% if messages %}
     {% for msg in messages %}
     <div class="flash_msg mb-5 rounded-xl flex">
@@ -63,13 +71,25 @@
 
 {% block scripts %}
 <script>
+    // Flash msg: Auth-error
     const error_div = document.querySelector(".flash_msg");
-    const close_btn_div_formError = document.querySelector("#crossBtnDiv_formError");
     const crossBtnDiv_msg = document.querySelector("#crossBtnDiv_msg");
+    // Form field error: Email
+    const error_div_email = document.querySelector(".flash_msg_email");
+    const crossBtnDiv_formError_email = document.querySelector("#crossBtnDiv_formError_email");
+    // Form field error: Password
+    const error_div_pass = document.querySelector(".flash_msg_pass");
+    const crossBtnDiv_formError_pass = document.querySelector("#crossBtnDiv_formError_pass");
 
-    if (close_btn_div_formError) {
-        close_btn_div_formError.addEventListener("click", (e) => {
-            error_div.remove();
+    if (crossBtnDiv_formError_email) {
+        crossBtnDiv_formError_email.addEventListener("click", (e) => {
+            error_div_email.remove();
+        });
+    }
+
+    if (crossBtnDiv_formError_pass) {
+        crossBtnDiv_formError_pass.addEventListener("click", (e) => {
+            error_div_pass.remove();
         });
     }
 
