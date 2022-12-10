@@ -50,11 +50,20 @@ Stage-3:
 - Referencing the URL to acquire an app password.
     - https://support.google.com/accounts/answer/185833
 
+################# Password Reset
+- User can reset their account password through mails from the login-screen.
+    - TODO: Implement closable flash-msg to the forms regarding password-reset-process.
+
+
 
 
 -------------------------------------------- Backlogs
 # Define functionality for active users in each channel. [Done; documentation is yet to complete]
-# Check whether the user has an active status while logging-in,
+# TODO: Check whether the user has an active status while logging-in,
     If not then remind him of activating his/her account using email verification, which is yet to complete.
     If the token is lost, provide a function for generating another email-verification token.
-# When a user is deleted, ensure his/her messages retained afterwards as "Anonymous User".
+# TODO: When a user is deleted, ensure his/her messages retained afterwards as "Anonymous User".
+# TODO: Give profile settings for users. Define & make a list of settings.
+    - Reset password
+# TODO: Option for newly registered users to request for regenerating email-verification-token & mail them
+    if they accidentally lose them. The requests will be enlisted to the **support-platform**.

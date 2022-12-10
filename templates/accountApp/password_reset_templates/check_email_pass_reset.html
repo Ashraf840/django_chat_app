@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block content %}
+
+<main class="flex h-screen justify-center items-center bg-white">
+    <div class="check-email-text flex flex-col justify-center items-center bg-slate-300 p-12 rounded-3xl shadow-xl">
+        <h1 class="text-4xl">Check you email/spam to reset password!</h1>
+        <img src="{% static 'img/circled-check-email-envelope-100.png' %}"
+             alt="check-email-envelope-icon" height="100" width="100"
+             class="my-8"
+        >
+    </div>
+</main>
+
+{% endblock %}
