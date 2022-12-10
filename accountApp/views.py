@@ -6,7 +6,6 @@ from .emailVerification import emailVerification
 from django.contrib import messages
 
 
-# TODO: Add flash msg in auth system.
 # TODO: Make the auth system under class-based views.
 # TODO: Make password-reset using email-verification feature.
 
@@ -85,8 +84,31 @@ def userLogin(request):
             # print('Form fields (password-error):', form.fields.get('password').error_messages)
             # print('Form fields (password-error):', form.fields.get('password'))
 
-
             # "form.errors" passed to frontend using context-dict; form-field-specific-errors
             context['form'] = form  # pass the form.errors into HTML
 
     return render(request, 'accountApp/login.html', context)
+
+
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
+
+
+def check_email_pass_reset(request):
+    context = {
+        'title': 'Password Reset',
+    }
+    return render(request, 'accountApp/password_reset_templates/check_email_pass_reset.html', context)
+
+
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    template_name = 'accountApp/password_reset_templates/password_reset.html'
+    email_template_name = 'accountApp/password_reset_templates/email_templates/pass_reset.txt'
+    html_email_template_name = 'accountApp/password_reset_templates/email_templates/pass_reset.html'
+    subject_template_name = 'accountApp/password_reset_templates/email_templates/pass_reset_email_subj.txt'
+    # success_message = "We've emailed you instructions for setting your password, " \
+    #                   "if an account exists with the email you entered. You should receive them shortly." \
+    #                   " If you don't receive an email, " \
+    #                   "please make sure you've entered the address you registered with, and check your spam folder."
+    success_url = reverse_lazy('accountApp:check_email_pass_reset')

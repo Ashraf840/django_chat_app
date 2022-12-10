@@ -19,6 +19,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# TODO: Add 404 error HTML page
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('auth/', include(('accountApp.urls', 'app_name'), namespace='AccountApplication')),

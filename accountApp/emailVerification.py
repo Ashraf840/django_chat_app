@@ -13,13 +13,13 @@ from django.http.response import HttpResponse
 
 
 # Multi-threading; Email will be sent faster & the user will not feel like waiting to be redirected to the login page
-class EmailThread(threading.Thread):
-    def __init__(self, msg):
-        self.email = msg
-        threading.Thread.__init__(self)
-
-    def run(self):
-        self.email.send()
+# class EmailThread(threading.Thread):
+#     def __init__(self, msg):
+#         self.email = msg
+#         threading.Thread.__init__(self)
+#
+#     def run(self):
+#         self.email.send()
 
 
 # def emailVerification(user_id=None, req_dict_domain=None, user=None, user_email=None, fullName=None):
@@ -54,8 +54,9 @@ def emailVerification(user_email=None, *args, **kwargs):
     # [Ref]: https://stackoverflow.com/a/49894619
     # msg = EmailMultiAlternatives(email_subject, text_content, from_email, [to_email])
     # msg.attach_alternative(html_content, "text/html")
-    msg = send_mail(email_subject, text_content, from_email, [to_email], html_message=html_content)
-    EmailThread(msg).start()
+    # msg = send_mail(email_subject, text_content, from_email, [to_email], html_message=html_content)
+    send_mail(email_subject, text_content, from_email, [to_email], html_message=html_content)
+    # EmailThread(msg).start()
 
 
 # Redirection link to the login page after user-account activation
