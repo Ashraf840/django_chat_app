@@ -51,6 +51,7 @@ Stage-3:
     - https://support.google.com/accounts/answer/185833
 
 ################# Password Reset
+Ref: https://dev.to/earthcomfy/django-reset-password-3k0l
 - User can reset their account password through mails from the login-screen.
     - TODO: Implement closable flash-msg to the forms regarding password-reset-process.
 
