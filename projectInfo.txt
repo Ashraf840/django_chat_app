@@ -68,3 +68,4 @@ Ref: https://dev.to/earthcomfy/django-reset-password-3k0l
     - Reset password; Check the previous password before letting the user reset password.
 # TODO: Option for newly registered users to request for regenerating email-verification-token & mail them
     if they accidentally lose them. The requests will be enlisted to the **support-platform**.
+# TODO: Auto scroll-down in the chatbox immediately after getting a new msg.
