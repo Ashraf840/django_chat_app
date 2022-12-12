@@ -53,7 +53,7 @@ Stage-3:
 ################# Password Reset
 Ref: https://dev.to/earthcomfy/django-reset-password-3k0l
 - User can reset their account password through mails from the login-screen.
-    - TODO: Implement closable flash-msg to the forms regarding password-reset-process.
+    - Implemented closable flash-msg to the forms regarding password-reset-process.
 
 
 
@@ -65,6 +65,6 @@ Ref: https://dev.to/earthcomfy/django-reset-password-3k0l
     If the token is lost, provide a function for generating another email-verification token.
 # TODO: When a user is deleted, ensure his/her messages retained afterwards as "Anonymous User".
 # TODO: Give profile settings for users. Define & make a list of settings.
-    - Reset password
+    - Reset password; Check the previous password before letting the user reset password.
 # TODO: Option for newly registered users to request for regenerating email-verification-token & mail them
     if they accidentally lose them. The requests will be enlisted to the **support-platform**.
